@@ -5,8 +5,8 @@
 
 //================================//
 //------ESSENTIAL VARIABLES------//
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
 
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
@@ -173,18 +173,94 @@ class Player{
 public:
     Player();
     ~Player();
+    
+    bool loadSheet();
+    void draw();
+    
+    void moveLeft();
+    void moveRight();
+    void moveUp();
+    void moveDown();
+
 private:
     float posX, posY;
+    float size = 60;
+    float speed = 10;
     LTexture gSpriteSheetTexture;
     SDL_Rect gSpriteClip;
 };
 
+Player::Player()
+{
+    posX = (SCREEN_WIDTH/2)-size/2;
+    posY = (SCREEN_HEIGHT/2)-size/2;
+}
+
+Player::~Player()
+{
+}
+
+bool Player::loadSheet()
+{
+    //success flag
+    bool success = true;
+    
+    if(!gSpriteSheetTexture.loadFromFile("data/spritesheet.png"))
+    {
+        printf("Failed to load spritesheet texture SDL_Image Error: %s\n", IMG_GetError());
+        success = false;
+    }else
+    {
+        gSpriteClip.x = 0;
+        gSpriteClip.y = 0;
+        gSpriteClip.w = size;
+        gSpriteClip.h = size;
+    }
+    
+    return success;
+}
+
+void Player::draw()
+{
+    if(!this->loadSheet())
+    {
+        printf("Can't draw player sprite\n");
+        return;
+    }
+    else
+    {
+        gSpriteSheetTexture.render(posX, posY, &gSpriteClip);
+    }
+}
+
+void Player::moveLeft()
+{
+    posX-=speed;
+}
+
+void Player::moveRight()
+{
+    posX+=speed;
+}
+
+void Player::moveUp()
+{
+    posY-=speed;
+}
+
+void Player::moveDown()
+{
+    posY+=speed;
+}
 //================================//
 
 //================================//
 bool init();
 void close();
 bool loadMedia();
+void movement();
+
+Player player;
 
 bool init()
 {
@@ -228,6 +304,12 @@ bool init()
 bool loadMedia()
 {
     bool success = true;
+    
+    if(!player.loadSheet())
+    {
+        printf("Couldn't player.loadsheet\n");
+        success = false;
+    }
     return success;
 }
 
@@ -242,6 +324,28 @@ void close()
     
     SDL_Quit();
     IMG_Quit();
+}
+
+void movement()
+{
+    const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+    
+    if( currentKeyStates[ SDL_SCANCODE_W ] )
+    {
+        player.moveUp();
+    }
+    if( currentKeyStates[ SDL_SCANCODE_S ] )
+    {
+        player.moveDown();
+    }
+    if( currentKeyStates[ SDL_SCANCODE_A ] )
+    {
+        player.moveLeft();
+    }
+    if( currentKeyStates[ SDL_SCANCODE_D ] )
+    {
+        player.moveRight();
+    }
 }
 //================================//
 
@@ -267,12 +371,13 @@ int main(int argc, char const *argv[])
                     quit = true;
                 }
             }
+            movement();
+            
             //Clear Screen
-            SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);
+            SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
             SDL_RenderClear(gRenderer);
             
-            SDL_Rect eRect = { 300, 300, 50, 100 };
-            SDL_RenderDrawRect(gRenderer, &eRect);
+            player.draw();
             
             //Update Screen
             SDL_RenderPresent(gRenderer);
