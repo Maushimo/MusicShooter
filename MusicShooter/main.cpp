@@ -39,7 +39,7 @@ public:
     void setAlpha( Uint8 alpha );
     
     //Renders texture at given point
-    void render( int x, int y, SDL_Rect* clip = NULL );
+    void render( int x, int y, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE );
     
     //Gets image dimensions
     int getWidth();
@@ -140,7 +140,7 @@ void LTexture::setAlpha( Uint8 alpha )
     SDL_SetTextureAlphaMod( mTexture, alpha );
 }
 
-void LTexture::render( int x, int y, SDL_Rect* clip )
+void LTexture::render( int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip )
 {
     //Set rendering space and render to screen
     SDL_Rect renderQuad = { x, y, mWidth, mHeight };
@@ -153,7 +153,7 @@ void LTexture::render( int x, int y, SDL_Rect* clip )
     }
     
     //Render to screen
-    SDL_RenderCopy( gRenderer, mTexture, clip, &renderQuad );
+    SDL_RenderCopyEx( gRenderer, mTexture, clip, &renderQuad, angle, center, flip );
 }
 
 int LTexture::getWidth()
@@ -175,7 +175,8 @@ public:
     ~Player();
     
     bool loadSheet();
-    void draw();
+    void draw(int mouseX, int mouseY);
+    void boundaries();
     
     void moveLeft();
     void moveRight();
@@ -186,6 +187,7 @@ private:
     float posX, posY;
     float size = 60;
     float speed = 10;
+    double angle;
     LTexture gSpriteSheetTexture;
     SDL_Rect gSpriteClip;
 };
@@ -194,10 +196,12 @@ Player::Player()
 {
     posX = (SCREEN_WIDTH/2)-size/2;
     posY = (SCREEN_HEIGHT/2)-size/2;
+    angle = 0.0;
 }
 
 Player::~Player()
 {
+    gSpriteSheetTexture.free();
 }
 
 bool Player::loadSheet()
@@ -211,6 +215,7 @@ bool Player::loadSheet()
         success = false;
     }else
     {
+        //Crop player sprites
         gSpriteClip.x = 0;
         gSpriteClip.y = 0;
         gSpriteClip.w = size;
@@ -220,7 +225,7 @@ bool Player::loadSheet()
     return success;
 }
 
-void Player::draw()
+void Player::draw(int mouseX, int mouseY)
 {
     if(!this->loadSheet())
     {
@@ -229,7 +234,32 @@ void Player::draw()
     }
     else
     {
-        gSpriteSheetTexture.render(posX, posY, &gSpriteClip);
+        //really hacky fix of minusing 90 degrees here, MUST FIX PROPERLY
+        angle = ((atan2(posY-mouseY, posX-mouseX)*180)/M_PI)-90;
+        
+        gSpriteSheetTexture.render(posX, posY, &gSpriteClip, angle, NULL, SDL_FLIP_NONE);
+        this->boundaries();
+        //std::cout << "Angle: " << angle << std::endl;
+    }
+}
+
+void Player::boundaries()
+{
+    if(posX < 0)
+    {
+        posX = 0;
+    }
+    if((posX+size) > SCREEN_WIDTH)
+    {
+        posX = SCREEN_WIDTH-size;
+    }
+    if(posY < 0)
+    {
+        posY = 0;
+    }
+    if((posY+size) > SCREEN_HEIGHT)
+    {
+        posY = SCREEN_HEIGHT-size;
     }
 }
 
@@ -261,6 +291,8 @@ bool loadMedia();
 void movement();
 
 Player player;
+
+int mouseX, mouseY;
 
 bool init()
 {
@@ -371,13 +403,18 @@ int main(int argc, char const *argv[])
                     quit = true;
                 }
             }
+            //Get Mouse Position
+            SDL_GetMouseState(&mouseX, &mouseY);
+            //std::cout << "Mouse X: " << mouseX << " Mouse Y: " << mouseY << std::endl;
+            
+            //Movement keys
             movement();
             
             //Clear Screen
             SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
             SDL_RenderClear(gRenderer);
             
-            player.draw();
+            player.draw(mouseX, mouseY);
             
             //Update Screen
             SDL_RenderPresent(gRenderer);

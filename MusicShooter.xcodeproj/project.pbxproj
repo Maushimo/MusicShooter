@@ -29,6 +29,7 @@
 		42D49DC31E50C79C0096A416 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		42D49DCB1E50C7B00096A416 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		42D49DCD1E50C7E50096A416 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
+		42DE931E1E577921001BF0C6 /* libSDL2_gfx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2_gfx.a; path = ../../../../../../../usr/local/lib/libSDL2_gfx.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +73,7 @@
 		42D49DCA1E50C7B00096A416 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				42DE931E1E577921001BF0C6 /* libSDL2_gfx.a */,
 				42D49DCD1E50C7E50096A416 /* SDL2_image.framework */,
 				42D49DCB1E50C7B00096A416 /* SDL2.framework */,
 			);
