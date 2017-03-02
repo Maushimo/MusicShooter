@@ -46,6 +46,41 @@ bool Player::loadSheet()
     return success;
 }
 
+void Player::update()
+{
+    //constantly add velocity
+    posX+=vx;
+    posY+=vy;
+    
+    //handle drag
+    if(vx > 0)
+    {
+     vx-=drag;
+    }else if(vx < 0)
+    {
+        vx+=drag;
+    }
+    
+    if(vy > 0)
+    {
+        vy-=drag;
+    }else if(vy < 0)
+    {
+        vy+=drag;
+    }
+    
+    //eliminate judder
+    if(vx < drag && vx > -drag)
+    {
+        vx = 0;
+    }
+    if(vy < drag && vy > -drag)
+    {
+        vy = 0;
+    }
+
+}
+
 void Player::draw(int mouseX, int mouseY)
 {
     if(!this->loadSheet())
@@ -55,12 +90,10 @@ void Player::draw(int mouseX, int mouseY)
     }
     else
     {
-        //really hacky fix of minusing 90 degrees here, MUST FIX PROPERLY
         angle = ((atan2((posY+size/2)-mouseY, (posX+size/2)-mouseX)*180)/M_PI)-90;
         
         this->gSpriteSheetTexture->render(posX, posY, &gSpriteClip, angle, NULL, SDL_FLIP_NONE);
         this->boundaries();
-        //std::cout << "Angle: " << angle << std::endl;
     }
 }
 
@@ -84,22 +117,47 @@ void Player::boundaries()
     }
 }
 
+
+//Every time these functions are invoked, velocity is added
 void Player::moveLeft()
 {
-    posX-=speed;
+    //posX-=speed;
+    if(vx > -speed)
+    {
+        vx--;
+    }
 }
 
 void Player::moveRight()
 {
-    posX+=speed;
+    //posX+=speed;
+    if(vx < speed)
+    {
+        vx++;
+    }
 }
 
 void Player::moveUp()
 {
-    posY-=speed;
+    //posY-=speed;
+    if(vy > -speed)
+    {
+        vy--;
+    }
 }
 
 void Player::moveDown()
 {
-    posY+=speed;
+    //posY+=speed;
+    if(vy < speed)
+    {
+        vy++;
+    }
 }
+
+/*
+void Player::shoot()
+{
+    
+}
+*/

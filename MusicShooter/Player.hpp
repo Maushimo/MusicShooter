@@ -21,6 +21,7 @@ public:
     ~Player();
     
     bool loadSheet();
+    void update();
     void draw(int mouseX, int mouseY);
     void boundaries();
     
@@ -29,11 +30,20 @@ public:
     void moveUp();
     void moveDown();
     
+    //void shoot();
+    
 private:
     float posX, posY;
     float size = 60;
+    
+    //Velocity
+    float vx;
+    float vy;
+    
     float speed = 10;
+    float drag = 0.5;
     double angle;
+    
     LTexture* gSpriteSheetTexture;
     SDL_Rect gSpriteClip;
     

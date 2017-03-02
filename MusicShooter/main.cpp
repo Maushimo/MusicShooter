@@ -53,7 +53,7 @@ bool loadMedia()
 }
 
 void close()
-{    
+{
     SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(gWindow);
     gWindow = NULL;
@@ -119,6 +119,7 @@ int main(int argc, char const *argv[])
             SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
             SDL_RenderClear(gRenderer);
             
+            player->update();
             player->draw(mouseX, mouseY);
             
             //Update Screen
