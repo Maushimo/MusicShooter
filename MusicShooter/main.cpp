@@ -1,303 +1,8 @@
-#include <SDL2/SDL.h>
-#include <SDL2_image/SDL_image.h>
-#include <iostream>
-#include <string>
-
-//================================//
-//------ESSENTIAL VARIABLES------//
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
-
-SDL_Window* gWindow = NULL;
-SDL_Renderer* gRenderer = NULL;
-//================================//
-
-//================================//
-//-----TEXTURE WRAPPER CLASS-----//
-class LTexture
-{
-public:
-    //Initializes variables
-    LTexture();
-    
-    //Deallocates memory
-    ~LTexture();
-    
-    //Loads image at specified path
-    bool loadFromFile( std::string path );
-    
-    //Deallocates texture
-    void free();
-    
-    //Set color modulation
-    void setColor( Uint8 red, Uint8 green, Uint8 blue );
-    
-    //Set blending
-    void setBlendMode( SDL_BlendMode blending );
-    
-    //Set alpha modulation
-    void setAlpha( Uint8 alpha );
-    
-    //Renders texture at given point
-    void render( int x, int y, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE );
-    
-    //Gets image dimensions
-    int getWidth();
-    int getHeight();
-    
-private:
-    //The actual hardware texture
-    SDL_Texture* mTexture;
-    
-    //Image dimensions
-    int mWidth;
-    int mHeight;
-};
-
-
-LTexture::LTexture()
-{
-    //Initialize
-    mTexture = NULL;
-    mWidth = 0;
-    mHeight = 0;
-}
-
-LTexture::~LTexture()
-{
-    //Deallocate
-    free();
-}
-
-bool LTexture::loadFromFile( std::string path )
-{
-    //Get rid of preexisting texture
-    free();
-    
-    //The final texture
-    SDL_Texture* newTexture = NULL;
-    
-    //Load image at specified path
-    SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
-    if( loadedSurface == NULL )
-    {
-        printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
-    }
-    else
-    {
-        //Color key image
-        SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
-        
-        //Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
-        if( newTexture == NULL )
-        {
-            printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
-        }
-        else
-        {
-            //Get image dimensions
-            mWidth = loadedSurface->w;
-            mHeight = loadedSurface->h;
-        }
-        
-        //Get rid of old loaded surface
-        SDL_FreeSurface( loadedSurface );
-    }
-    
-    //Return success
-    mTexture = newTexture;
-    return mTexture != NULL;
-}
-
-void LTexture::free()
-{
-    //Free texture if it exists
-    if( mTexture != NULL )
-    {
-        SDL_DestroyTexture( mTexture );
-        mTexture = NULL;
-        mWidth = 0;
-        mHeight = 0;
-    }
-}
-
-void LTexture::setColor( Uint8 red, Uint8 green, Uint8 blue )
-{
-    //Modulate texture rgb
-    SDL_SetTextureColorMod( mTexture, red, green, blue );
-}
-
-void LTexture::setBlendMode( SDL_BlendMode blending )
-{
-    //Set blending function
-    SDL_SetTextureBlendMode( mTexture, blending );
-}
-
-void LTexture::setAlpha( Uint8 alpha )
-{
-    //Modulate texture alpha
-    SDL_SetTextureAlphaMod( mTexture, alpha );
-}
-
-void LTexture::render( int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip )
-{
-    //Set rendering space and render to screen
-    SDL_Rect renderQuad = { x, y, mWidth, mHeight };
-    
-    //Set clip rendering dimensions
-    if( clip != NULL )
-    {
-        renderQuad.w = clip->w;
-        renderQuad.h = clip->h;
-    }
-    
-    //Render to screen
-    SDL_RenderCopyEx( gRenderer, mTexture, clip, &renderQuad, angle, center, flip );
-}
-
-int LTexture::getWidth()
-{
-    return mWidth;
-}
-
-int LTexture::getHeight()
-{
-    return mHeight;
-}
-//================================//
-
-//================================//
-//----------PLAYER CLASS----------//
-class Player{
-public:
-    Player();
-    ~Player();
-    
-    bool loadSheet();
-    void draw(int mouseX, int mouseY);
-    void boundaries();
-    
-    void moveLeft();
-    void moveRight();
-    void moveUp();
-    void moveDown();
-
-private:
-    float posX, posY;
-    float size = 60;
-    float speed = 10;
-    double angle;
-    LTexture gSpriteSheetTexture;
-    SDL_Rect gSpriteClip;
-};
-
-Player::Player()
-{
-    posX = (SCREEN_WIDTH/2)-size/2;
-    posY = (SCREEN_HEIGHT/2)-size/2;
-    angle = 0.0;
-}
-
-Player::~Player()
-{
-    gSpriteSheetTexture.free();
-}
-
-bool Player::loadSheet()
-{
-    //success flag
-    bool success = true;
-    
-    if(!gSpriteSheetTexture.loadFromFile("data/spritesheet.png"))
-    {
-        printf("Failed to load spritesheet texture SDL_Image Error: %s\n", IMG_GetError());
-        success = false;
-    }else
-    {
-        //Crop player sprites
-        gSpriteClip.x = 0;
-        gSpriteClip.y = 0;
-        gSpriteClip.w = size;
-        gSpriteClip.h = size;
-    }
-    
-    return success;
-}
-
-void Player::draw(int mouseX, int mouseY)
-{
-    if(!this->loadSheet())
-    {
-        printf("Can't draw player sprite\n");
-        return;
-    }
-    else
-    {
-        //really hacky fix of minusing 90 degrees here, MUST FIX PROPERLY
-        angle = ((atan2(posY-mouseY, posX-mouseX)*180)/M_PI)-90;
-        
-        gSpriteSheetTexture.render(posX, posY, &gSpriteClip, angle, NULL, SDL_FLIP_NONE);
-        this->boundaries();
-        //std::cout << "Angle: " << angle << std::endl;
-    }
-}
-
-void Player::boundaries()
-{
-    if(posX < 0)
-    {
-        posX = 0;
-    }
-    if((posX+size) > SCREEN_WIDTH)
-    {
-        posX = SCREEN_WIDTH-size;
-    }
-    if(posY < 0)
-    {
-        posY = 0;
-    }
-    if((posY+size) > SCREEN_HEIGHT)
-    {
-        posY = SCREEN_HEIGHT-size;
-    }
-}
-
-void Player::moveLeft()
-{
-    posX-=speed;
-}
-
-void Player::moveRight()
-{
-    posX+=speed;
-}
-
-void Player::moveUp()
-{
-    posY-=speed;
-}
-
-void Player::moveDown()
-{
-    posY+=speed;
-}
-//================================//
-
-//================================//
-bool init();
-void close();
-bool loadMedia();
-void movement();
-
-Player player;
-
-int mouseX, mouseY;
+#include "main.h"
 
 bool init()
 {
     bool success = true;
-    
     if(SDL_Init(SDL_INIT_VIDEO) < 0)
     {
         printf("SDL could not init! SDL Error: %s\n", SDL_GetError());
@@ -330,6 +35,8 @@ bool init()
             }
         }
     }
+    player = new Player(gRenderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+
     return success;
 }
 
@@ -337,7 +44,7 @@ bool loadMedia()
 {
     bool success = true;
     
-    if(!player.loadSheet())
+    if(!player->loadSheet())
     {
         printf("Couldn't player.loadsheet\n");
         success = false;
@@ -346,9 +53,7 @@ bool loadMedia()
 }
 
 void close()
-{
-    //gSpriteSheetTexture.free();
-    
+{    
     SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(gWindow);
     gWindow = NULL;
@@ -364,19 +69,19 @@ void movement()
     
     if( currentKeyStates[ SDL_SCANCODE_W ] )
     {
-        player.moveUp();
+        player->moveUp();
     }
     if( currentKeyStates[ SDL_SCANCODE_S ] )
     {
-        player.moveDown();
+        player->moveDown();
     }
     if( currentKeyStates[ SDL_SCANCODE_A ] )
     {
-        player.moveLeft();
+        player->moveLeft();
     }
     if( currentKeyStates[ SDL_SCANCODE_D ] )
     {
-        player.moveRight();
+        player->moveRight();
     }
 }
 //================================//
@@ -414,7 +119,7 @@ int main(int argc, char const *argv[])
             SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
             SDL_RenderClear(gRenderer);
             
-            player.draw(mouseX, mouseY);
+            player->draw(mouseX, mouseY);
             
             //Update Screen
             SDL_RenderPresent(gRenderer);

@@ -1,6 +1,6 @@
 dependencies: \
-  /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/main.cpp \
-  /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/main.h \
+  /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/LTexture.cpp \
+  /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/LTexture.hpp \
   /Library/Frameworks/SDL2.framework/Headers/SDL.h \
   /Library/Frameworks/SDL2.framework/Headers/SDL_main.h \
   /Library/Frameworks/SDL2.framework/Headers/SDL_stdinc.h \
@@ -45,6 +45,4 @@ dependencies: \
   /Library/Frameworks/SDL2.framework/Headers/SDL_system.h \
   /Library/Frameworks/SDL2.framework/Headers/SDL_timer.h \
   /Library/Frameworks/SDL2.framework/Headers/SDL_version.h \
-  /Library/Frameworks/SDL2_image.framework/Headers/SDL_image.h \
-  /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/LTexture.hpp \
-  /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/Player.hpp
+  /Library/Frameworks/SDL2_image.framework/Headers/SDL_image.h
