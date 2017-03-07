@@ -15,7 +15,8 @@
 #include <iostream>
 
 //----------PLAYER CLASS----------//
-class Player{
+class Player
+{
 public:
     Player(SDL_Renderer* r, int sWidth, int sHeight);
     ~Player();
@@ -25,6 +26,7 @@ public:
     void draw(int mouseX, int mouseY);
     void boundaries();
     
+    void movementKeys();
     void moveLeft();
     void moveRight();
     void moveUp();

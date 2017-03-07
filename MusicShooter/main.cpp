@@ -35,8 +35,10 @@ bool init()
             }
         }
     }
+    
     player = new Player(gRenderer, SCREEN_WIDTH, SCREEN_HEIGHT);
-
+    
+    
     return success;
 }
 
@@ -63,29 +65,6 @@ void close()
     IMG_Quit();
 }
 
-void movement()
-{
-    const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
-    
-    if( currentKeyStates[ SDL_SCANCODE_W ] )
-    {
-        player->moveUp();
-    }
-    if( currentKeyStates[ SDL_SCANCODE_S ] )
-    {
-        player->moveDown();
-    }
-    if( currentKeyStates[ SDL_SCANCODE_A ] )
-    {
-        player->moveLeft();
-    }
-    if( currentKeyStates[ SDL_SCANCODE_D ] )
-    {
-        player->moveRight();
-    }
-}
-//================================//
-
 //================================//
 //----------MAIN METHOD----------//
 int main(int argc, char const *argv[])
@@ -110,15 +89,12 @@ int main(int argc, char const *argv[])
             }
             //Get Mouse Position
             SDL_GetMouseState(&mouseX, &mouseY);
-            //std::cout << "Mouse X: " << mouseX << " Mouse Y: " << mouseY << std::endl;
-            
-            //Movement keys
-            movement();
             
             //Clear Screen
             SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
             SDL_RenderClear(gRenderer);
             
+            player->movementKeys();
             player->update();
             player->draw(mouseX, mouseY);
             

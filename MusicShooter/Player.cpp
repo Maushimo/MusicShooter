@@ -55,12 +55,11 @@ void Player::update()
     //handle drag
     if(vx > 0)
     {
-     vx-=drag;
+        vx-=drag;
     }else if(vx < 0)
     {
         vx+=drag;
     }
-    
     if(vy > 0)
     {
         vy-=drag;
@@ -78,7 +77,7 @@ void Player::update()
     {
         vy = 0;
     }
-
+    
 }
 
 void Player::draw(int mouseX, int mouseY)
@@ -117,6 +116,28 @@ void Player::boundaries()
     }
 }
 
+//functions controlling movement keys
+void Player::movementKeys()
+{
+    const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+    
+    if( currentKeyStates[ SDL_SCANCODE_W ] )
+    {
+        this->moveUp();
+    }
+    if( currentKeyStates[ SDL_SCANCODE_S ] )
+    {
+        this->moveDown();
+    }
+    if( currentKeyStates[ SDL_SCANCODE_A ] )
+    {
+        this->moveLeft();
+    }
+    if( currentKeyStates[ SDL_SCANCODE_D ] )
+    {
+        this->moveRight();
+    }
+}
 
 //Every time these functions are invoked, velocity is added
 void Player::moveLeft()
@@ -156,8 +177,8 @@ void Player::moveDown()
 }
 
 /*
-void Player::shoot()
-{
-    
-}
-*/
+ void Player::shoot()
+ {
+ 
+ }
+ */

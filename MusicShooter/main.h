@@ -11,10 +11,9 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
-#include "LTexture.hpp"
 #include "Player.hpp"
+#include "NsoundAll.h"
 #include <iostream>
-#include <string>
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -22,10 +21,11 @@ const int SCREEN_HEIGHT = 600;
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
 
+//runs at the start of the program
 bool init();
+//runs when the program is closed
 void close();
 bool loadMedia();
-void movement();
 
 Player* player;
 

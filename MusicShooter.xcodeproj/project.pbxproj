@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4267B60A1E68463A00A3B6D5 /* LTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4267B6081E68463A00A3B6D5 /* LTexture.cpp */; };
 		4267B60D1E68475200A3B6D5 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4267B60B1E68475200A3B6D5 /* Player.cpp */; };
+		42B1D2C01E6EEC5500901B8C /* Bullet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42B1D2BE1E6EEC5500901B8C /* Bullet.cpp */; };
+		42B1D2C31E6EED2500901B8C /* libNsound.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B1D2C11E6EEC8D00901B8C /* libNsound.dylib */; };
 		42D49DC41E50C79C0096A416 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42D49DC31E50C79C0096A416 /* main.cpp */; };
 		42D49DCC1E50C7B00096A416 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D49DCB1E50C7B00096A416 /* SDL2.framework */; };
 		42D49DCE1E50C7E50096A416 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D49DCD1E50C7E50096A416 /* SDL2_image.framework */; };
@@ -32,6 +34,9 @@
 		4267B60B1E68475200A3B6D5 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
 		4267B60C1E68475200A3B6D5 /* Player.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Player.hpp; sourceTree = "<group>"; };
 		4267B60E1E6848C700A3B6D5 /* main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
+		42B1D2BE1E6EEC5500901B8C /* Bullet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Bullet.cpp; sourceTree = "<group>"; };
+		42B1D2BF1E6EEC5500901B8C /* Bullet.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Bullet.hpp; sourceTree = "<group>"; };
+		42B1D2C11E6EEC8D00901B8C /* libNsound.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libNsound.dylib; path = MusicShooter/libNsound.dylib; sourceTree = "<group>"; };
 		42D49DC01E50C79C0096A416 /* MusicShooter */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MusicShooter; sourceTree = BUILT_PRODUCTS_DIR; };
 		42D49DC31E50C79C0096A416 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		42D49DCB1E50C7B00096A416 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
@@ -44,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42B1D2C31E6EED2500901B8C /* libNsound.dylib in Frameworks */,
 				42D49DCE1E50C7E50096A416 /* SDL2_image.framework in Frameworks */,
 				42D49DCC1E50C7B00096A416 /* SDL2.framework in Frameworks */,
 			);
@@ -78,6 +84,8 @@
 				4267B6091E68463A00A3B6D5 /* LTexture.hpp */,
 				4267B60B1E68475200A3B6D5 /* Player.cpp */,
 				4267B60C1E68475200A3B6D5 /* Player.hpp */,
+				42B1D2BE1E6EEC5500901B8C /* Bullet.cpp */,
+				42B1D2BF1E6EEC5500901B8C /* Bullet.hpp */,
 			);
 			path = MusicShooter;
 			sourceTree = "<group>";
@@ -85,6 +93,7 @@
 		42D49DCA1E50C7B00096A416 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				42B1D2C11E6EEC8D00901B8C /* libNsound.dylib */,
 				42DE931E1E577921001BF0C6 /* libSDL2_gfx.a */,
 				42D49DCD1E50C7E50096A416 /* SDL2_image.framework */,
 				42D49DCB1E50C7B00096A416 /* SDL2.framework */,
@@ -152,6 +161,7 @@
 				4267B60A1E68463A00A3B6D5 /* LTexture.cpp in Sources */,
 				42D49DC41E50C79C0096A416 /* main.cpp in Sources */,
 				4267B60D1E68475200A3B6D5 /* Player.cpp in Sources */,
+				42B1D2C01E6EEC5500901B8C /* Bullet.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,6 +262,10 @@
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MusicShooter",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -262,6 +276,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MusicShooter",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
