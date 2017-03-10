@@ -25,6 +25,7 @@ public:
     
 private:
     float posX, posY;
+    float width, height;
     float vx = 2;
     float vy = 2;
     

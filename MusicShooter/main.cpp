@@ -3,7 +3,7 @@
 bool init()
 {
     bool success = true;
-    if(SDL_Init(SDL_INIT_VIDEO) < 0)
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
     {
         printf("SDL could not init! SDL Error: %s\n", SDL_GetError());
         success = false;
@@ -32,12 +32,27 @@ bool init()
             else
             {
                 SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+                
+                //init png loading
+                int imgFlags = IMG_INIT_PNG;
+                if(!(IMG_Init(imgFlags) & imgFlags))
+                {
+                    printf("SDL_image could not init! SDL_image Error: %s\n", IMG_GetError());
+                    success = false;
+                }
+                
+                //init SDL_Mixer
+                if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+                {
+                    printf("SDL_Mixer could not init! SDL_Mixer Error: %s\n", Mix_GetError());
+                    success = false;
+                }
             }
         }
     }
     
     player = new Player(gRenderer, SCREEN_WIDTH, SCREEN_HEIGHT);
-    
+    audio = new Audio();
     
     return success;
 }
@@ -63,6 +78,7 @@ void close()
     
     SDL_Quit();
     IMG_Quit();
+    Mix_Quit();
 }
 
 //================================//
@@ -78,6 +94,8 @@ int main(int argc, char const *argv[])
         bool quit = false;
         SDL_Event e;
         
+        audio->playMusic();
+        
         while(!quit)
         {
             while(SDL_PollEvent(&e) != 0)
@@ -87,6 +105,7 @@ int main(int argc, char const *argv[])
                     quit = true;
                 }
             }
+            
             //Get Mouse Position
             SDL_GetMouseState(&mouseX, &mouseY);
             
@@ -100,6 +119,9 @@ int main(int argc, char const *argv[])
             
             //Update Screen
             SDL_RenderPresent(gRenderer);
+            
+            //must figure out how to stop machinegun effect
+            //audio->playMusic();
         }
     }
     close();

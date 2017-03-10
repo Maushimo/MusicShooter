@@ -11,8 +11,9 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
+#include <SDL2_mixer/SDL_mixer.h>
 #include "Player.hpp"
-#include "NsoundAll.h"
+#include "Audio.hpp"
 #include <iostream>
 
 const int SCREEN_WIDTH = 800;
@@ -28,6 +29,7 @@ void close();
 bool loadMedia();
 
 Player* player;
+Audio* audio;
 
 int mouseX, mouseY;
 
