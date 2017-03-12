@@ -23,11 +23,17 @@ public:
     
     void setPosition(float x, float y);
     
+    void moveUp();
+    void moveDown();
+    void moveLeft();
+    void moveRight();
+    
 private:
     float posX, posY;
     float width, height;
     float vx = 2;
     float vy = 2;
+    float speed = 10;
     
     SDL_Rect drawnBullet;
     

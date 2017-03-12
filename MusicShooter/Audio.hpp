@@ -25,6 +25,11 @@ public:
     
     bool loadMusic();
     void playMusic();
+    
+    void muteDrums();
+    void muteBass();
+    
+    bool isPlayed;
 };
 
 #endif /* Audio_hpp */

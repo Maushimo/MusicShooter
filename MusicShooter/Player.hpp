@@ -10,8 +10,8 @@
 #define Player_hpp
 
 #include <SDL2/SDL.h>
-#include <SDL2_image/SDL_image.h>
 #include "LTexture.hpp"
+#include "Bullet.hpp"
 #include <iostream>
 
 //----------PLAYER CLASS----------//
@@ -32,7 +32,7 @@ public:
     void moveUp();
     void moveDown();
     
-    //void shoot();
+    void shoot();
     
 private:
     float posX, posY;

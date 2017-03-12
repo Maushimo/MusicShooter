@@ -50,9 +50,12 @@ bool init()
             }
         }
     }
-    
     player = new Player(gRenderer, SCREEN_WIDTH, SCREEN_HEIGHT);
     audio = new Audio();
+    
+    for(int i = 0; i < 10; i ++){
+        bEnemy[i] = new BasicEnemy(gRenderer, i*10, i*10);
+    }
     
     return success;
 }
@@ -65,6 +68,15 @@ bool loadMedia()
     {
         printf("Couldn't player.loadsheet\n");
         success = false;
+    }
+    
+    for(int i = 0; i < 10; i ++)
+    {
+        if(!bEnemy[i]->loadSheet())
+        {
+            printf("Couldn't BasicEnemy.loadsheet\n");
+            success = false;
+        }
     }
     return success;
 }
@@ -94,8 +106,6 @@ int main(int argc, char const *argv[])
         bool quit = false;
         SDL_Event e;
         
-        audio->playMusic();
-        
         while(!quit)
         {
             while(SDL_PollEvent(&e) != 0)
@@ -114,13 +124,31 @@ int main(int argc, char const *argv[])
             SDL_RenderClear(gRenderer);
             
             player->movementKeys();
+            
+            const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+            
+            if( currentKeyStates[ SDL_SCANCODE_1 ] )
+            {
+                audio->muteDrums();
+            }
+            
+            if( currentKeyStates[ SDL_SCANCODE_2 ])
+            {
+                audio->muteBass();
+            }
+            
             player->update();
             player->draw(mouseX, mouseY);
+            
+            for(int i=0;i<10;i++)
+            {
+                bEnemy[i]->update();
+                bEnemy[i]->draw();
+            }
             
             //Update Screen
             SDL_RenderPresent(gRenderer);
             
-            //must figure out how to stop machinegun effect
             //audio->playMusic();
         }
     }

@@ -22,7 +22,7 @@ Player::Player(SDL_Renderer* r, int sWidth, int sHeight)
 
 Player::~Player()
 {
-    delete gSpriteSheetTexture;
+    gSpriteSheetTexture->free();
 }
 
 bool Player::loadSheet()
@@ -39,8 +39,8 @@ bool Player::loadSheet()
         //Crop player sprites
         gSpriteClip.x = 0;
         gSpriteClip.y = 0;
-        gSpriteClip.w = size;
-        gSpriteClip.h = size;
+        gSpriteClip.w = (size-7);
+        gSpriteClip.h = (size-8);
     }
     
     return success;
@@ -176,9 +176,7 @@ void Player::moveDown()
     }
 }
 
-/*
  void Player::shoot()
  {
- 
+     
  }
- */

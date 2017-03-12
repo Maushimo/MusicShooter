@@ -35,5 +35,37 @@ void Bullet::update()
 
 void Bullet::draw()
 {
+    SDL_SetRenderDrawColor(gRenderer, 128, 128, 128, 255);
     SDL_RenderDrawRect(gRenderer, &drawnBullet);
+}
+
+void Bullet::moveUp()
+{
+    if(vy > -speed){
+        vy++;
+    }
+}
+
+void Bullet::moveDown()
+{
+    if(vy < speed)
+    {
+        vy--;
+    }
+}
+
+void Bullet::moveLeft()
+{
+    if(vx < speed)
+    {
+        vx--;
+    }
+}
+
+void Bullet::moveRight()
+{
+    if(vx > -speed)
+    {
+        vx++;
+    }
 }

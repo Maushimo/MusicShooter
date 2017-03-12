@@ -13,8 +13,10 @@
 #include <SDL2_image/SDL_image.h>
 #include <SDL2_mixer/SDL_mixer.h>
 #include "Player.hpp"
+#include "Basic Enemy.hpp"
 #include "Audio.hpp"
 #include <iostream>
+#include <thread>
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -29,6 +31,7 @@ void close();
 bool loadMedia();
 
 Player* player;
+BasicEnemy* bEnemy[10];
 Audio* audio;
 
 int mouseX, mouseY;

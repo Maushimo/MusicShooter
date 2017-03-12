@@ -10,6 +10,7 @@
 
 Audio::Audio()
 {
+    isPlayed = false;
     this->loadMusic();
 }
 
@@ -51,9 +52,24 @@ void Audio::playMusic()
         printf("Can't play music.");
         return;
     }else
-    {   
-        Mix_PlayChannel(0, kickSnare, 0);
-        Mix_PlayChannel(1, bass, 0);
-        Mix_PlayChannel(2, chords, 0);
+    {
+        if(!isPlayed)
+        {
+            Mix_PlayChannel(0, kickSnare, -1);
+            Mix_PlayChannel(1, bass, -1);
+            Mix_PlayChannel(2, chords, -1);
+            
+            isPlayed = true;
+        }
     }
+}
+
+void Audio::muteDrums()
+{
+    Mix_Volume(0, 0);
+}
+
+void Audio::muteBass()
+{
+    Mix_Volume(1, 0);
 }
