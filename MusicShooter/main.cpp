@@ -50,11 +50,15 @@ bool init()
             }
         }
     }
-    player = new Player(gRenderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+    //load spritesheet
+    gSpriteSheetTexture = new LTexture(gRenderer);
+    gSpriteSheetTexture->loadFromFile("data/spritesheet.png");
+    
+    player = new Player(gRenderer, SCREEN_WIDTH, SCREEN_HEIGHT, gSpriteSheetTexture);
     audio = new Audio();
     
     for(int i = 0; i < 10; i ++){
-        bEnemy[i] = new BasicEnemy(gRenderer, i*10, i*10);
+        bEnemy[i] = new BasicEnemy(gRenderer, i*10, i*10, gSpriteSheetTexture);
     }
     
     return success;

@@ -18,7 +18,7 @@
 class Player
 {
 public:
-    Player(SDL_Renderer* r, int sWidth, int sHeight);
+    Player(SDL_Renderer* r, int sWidth, int sHeight, LTexture* texture);
     ~Player();
     
     bool loadSheet();

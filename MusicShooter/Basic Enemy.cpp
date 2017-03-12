@@ -8,10 +8,10 @@
 
 #include "Basic Enemy.hpp"
 
-BasicEnemy::BasicEnemy(SDL_Renderer* r, float x, float y)
+BasicEnemy::BasicEnemy(SDL_Renderer* r, float x, float y, LTexture* spriteSheetTexture)
 {
     gRenderer = r;
-    gSpriteSheetTexture = new LTexture(gRenderer);
+    gSpriteSheetTexture = spriteSheetTexture;
     
     posX = x;
     posY = y;
@@ -26,17 +26,12 @@ BasicEnemy::~BasicEnemy()
 bool BasicEnemy::loadSheet()
 {
     bool success = true;
-    if(!gSpriteSheetTexture->loadFromFile("data/spritesheet.png"))
-    {
-        printf("Could not load spritesheet texture. SDL_Image Error: %s\n", IMG_GetError());
-        success = false;
-    }else
-    {
-        gSpriteClip.x = 61;
-        gSpriteClip.y = 0;
-        gSpriteClip.w = size;
-        gSpriteClip.h = size;
-    }
+    
+    gSpriteClip.x = 61;
+    gSpriteClip.y = 0;
+    gSpriteClip.w = size;
+    gSpriteClip.h = size;
+    
     return success;
 }
 

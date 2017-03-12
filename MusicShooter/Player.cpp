@@ -8,10 +8,10 @@
 
 #include "Player.hpp"
 
-Player::Player(SDL_Renderer* r, int sWidth, int sHeight)
+Player::Player(SDL_Renderer* r, int sWidth, int sHeight, LTexture* texture)
 {
     gRenderer = r;
-    gSpriteSheetTexture = new LTexture(gRenderer);
+    gSpriteSheetTexture = texture;
     SCREEN_WIDTH = sWidth;
     SCREEN_HEIGHT = sHeight;
     
@@ -30,18 +30,11 @@ bool Player::loadSheet()
     //success flag
     bool success = true;
     
-    if(!gSpriteSheetTexture->loadFromFile("data/spritesheet.png"))
-    {
-        printf("Failed to load spritesheet texture SDL_Image Error: %s\n", IMG_GetError());
-        success = false;
-    }else
-    {
-        //Crop player sprites
-        gSpriteClip.x = 0;
-        gSpriteClip.y = 0;
-        gSpriteClip.w = (size-7);
-        gSpriteClip.h = (size-8);
-    }
+    //Crop player sprites
+    gSpriteClip.x = 0;
+    gSpriteClip.y = 0;
+    gSpriteClip.w = (size-7);
+    gSpriteClip.h = (size-8);
     
     return success;
 }

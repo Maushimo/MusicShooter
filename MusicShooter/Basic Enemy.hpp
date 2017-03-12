@@ -16,7 +16,7 @@
 class BasicEnemy
 {
 public:
-    BasicEnemy(SDL_Renderer* r, float x, float y);
+    BasicEnemy(SDL_Renderer* r, float x, float y, LTexture* spriteSheetTexture);
     ~BasicEnemy();
     
     bool loadSheet();

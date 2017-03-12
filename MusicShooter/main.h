@@ -30,6 +30,7 @@ bool init();
 void close();
 bool loadMedia();
 
+LTexture* gSpriteSheetTexture;
 Player* player;
 BasicEnemy* bEnemy[10];
 Audio* audio;
