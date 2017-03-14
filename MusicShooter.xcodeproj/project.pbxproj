@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4255B0B41E76CB9F006D6AAE /* BasicEnemySpawnPoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4255B0B21E76CB9F006D6AAE /* BasicEnemySpawnPoint.cpp */; };
 		4267B60A1E68463A00A3B6D5 /* LTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4267B6081E68463A00A3B6D5 /* LTexture.cpp */; };
 		4267B60D1E68475200A3B6D5 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4267B60B1E68475200A3B6D5 /* Player.cpp */; };
 		426BF51B1E759F2C00D3FF27 /* Basic Enemy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426BF5191E759F2C00D3FF27 /* Basic Enemy.cpp */; };
@@ -31,6 +32,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4255B0B21E76CB9F006D6AAE /* BasicEnemySpawnPoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BasicEnemySpawnPoint.cpp; sourceTree = "<group>"; };
+		4255B0B31E76CB9F006D6AAE /* BasicEnemySpawnPoint.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BasicEnemySpawnPoint.hpp; sourceTree = "<group>"; };
 		4267B6081E68463A00A3B6D5 /* LTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LTexture.cpp; sourceTree = "<group>"; };
 		4267B6091E68463A00A3B6D5 /* LTexture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LTexture.hpp; sourceTree = "<group>"; };
 		4267B60B1E68475200A3B6D5 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
@@ -97,6 +100,8 @@
 				42E4913E1E70825A000C286C /* Audio.hpp */,
 				426BF5191E759F2C00D3FF27 /* Basic Enemy.cpp */,
 				426BF51A1E759F2C00D3FF27 /* Basic Enemy.hpp */,
+				4255B0B21E76CB9F006D6AAE /* BasicEnemySpawnPoint.cpp */,
+				4255B0B31E76CB9F006D6AAE /* BasicEnemySpawnPoint.hpp */,
 			);
 			path = MusicShooter;
 			sourceTree = "<group>";
@@ -175,6 +180,7 @@
 				4267B60D1E68475200A3B6D5 /* Player.cpp in Sources */,
 				42B1D2C01E6EEC5500901B8C /* Bullet.cpp in Sources */,
 				426BF51B1E759F2C00D3FF27 /* Basic Enemy.cpp in Sources */,
+				4255B0B41E76CB9F006D6AAE /* BasicEnemySpawnPoint.cpp in Sources */,
 				42E4913F1E70825A000C286C /* Audio.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -14,6 +14,7 @@
 #include <SDL2_mixer/SDL_mixer.h>
 #include "Player.hpp"
 #include "Basic Enemy.hpp"
+#include "BasicEnemySpawnPoint.hpp"
 #include "Audio.hpp"
 #include <iostream>
 #include <thread>
@@ -23,16 +24,18 @@ const int SCREEN_HEIGHT = 600;
 
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
+//global spritesheet for entities
+LTexture* gSpriteSheetTexture;
 
 //runs at the start of the program
 bool init();
 //runs when the program is closed
 void close();
+//mainly runs checks on the LTextures
 bool loadMedia();
 
-LTexture* gSpriteSheetTexture;
 Player* player;
-BasicEnemy* bEnemy[10];
+BasicEnemySpawnPoint* bEnemySpawner[3];
 Audio* audio;
 
 int mouseX, mouseY;

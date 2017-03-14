@@ -21,6 +21,8 @@ public:
     Player(SDL_Renderer* r, int sWidth, int sHeight, LTexture* texture);
     ~Player();
     
+    float posX, posY;
+    
     bool loadSheet();
     void update();
     void draw(int mouseX, int mouseY);
@@ -35,7 +37,7 @@ public:
     void shoot();
     
 private:
-    float posX, posY;
+    //float posX, posY;
     float size = 60;
     
     //Velocity

@@ -3,6 +3,7 @@
 bool init()
 {
     bool success = true;
+    
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
     {
         printf("SDL could not init! SDL Error: %s\n", SDL_GetError());
@@ -55,12 +56,13 @@ bool init()
     gSpriteSheetTexture->loadFromFile("data/spritesheet.png");
     
     player = new Player(gRenderer, SCREEN_WIDTH, SCREEN_HEIGHT, gSpriteSheetTexture);
+    
+    bEnemySpawner[0] = new BasicEnemySpawnPoint(gRenderer, gSpriteSheetTexture, SCREEN_WIDTH/4, 50);
+    bEnemySpawner[1] = new BasicEnemySpawnPoint(gRenderer, gSpriteSheetTexture, SCREEN_WIDTH/2, 50);
+    bEnemySpawner[2] = new BasicEnemySpawnPoint(gRenderer, gSpriteSheetTexture, 0, 50);
+    
     audio = new Audio();
-    
-    for(int i = 0; i < 10; i ++){
-        bEnemy[i] = new BasicEnemy(gRenderer, i*10, i*10, gSpriteSheetTexture);
-    }
-    
+
     return success;
 }
 
@@ -74,14 +76,6 @@ bool loadMedia()
         success = false;
     }
     
-    for(int i = 0; i < 10; i ++)
-    {
-        if(!bEnemy[i]->loadSheet())
-        {
-            printf("Couldn't BasicEnemy.loadsheet\n");
-            success = false;
-        }
-    }
     return success;
 }
 
@@ -144,10 +138,12 @@ int main(int argc, char const *argv[])
             player->update();
             player->draw(mouseX, mouseY);
             
-            for(int i=0;i<10;i++)
+            for(int i=0;i<3;i++)
             {
-                bEnemy[i]->update();
-                bEnemy[i]->draw();
+                bEnemySpawner[i]->setPlayerPosition(player->posX, player->posY);
+                bEnemySpawner[i]->spawnEnemy();
+                bEnemySpawner[i]->spawnerUpdate();
+                bEnemySpawner[i]->spawnerDraw();
             }
             
             //Update Screen
@@ -156,6 +152,7 @@ int main(int argc, char const *argv[])
             //audio->playMusic();
         }
     }
+    
     close();
     return 0;
 }

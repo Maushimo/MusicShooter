@@ -8,14 +8,15 @@
 
 #include "Basic Enemy.hpp"
 
-BasicEnemy::BasicEnemy(SDL_Renderer* r, float x, float y, LTexture* spriteSheetTexture)
+BasicEnemy::BasicEnemy(SDL_Renderer* r, LTexture* spriteSheetTexture, float x, float y)
 {
     gRenderer = r;
     gSpriteSheetTexture = spriteSheetTexture;
     
     posX = x;
     posY = y;
-    vy = 5;
+    vx = 3;
+    vy = 3;
 }
 
 BasicEnemy::~BasicEnemy()
@@ -37,7 +38,7 @@ bool BasicEnemy::loadSheet()
 
 void BasicEnemy::update()
 {
-    posY+=vy;
+    this->followPlayer();
 }
 
 void BasicEnemy::draw()
@@ -51,3 +52,33 @@ void BasicEnemy::draw()
         gSpriteSheetTexture->render(posX, posY, &gSpriteClip, 0, NULL, SDL_FLIP_NONE);
     }
 }
+
+void BasicEnemy::followPlayer()
+{
+    if(this->posX < playerX)
+    {
+        posX+=vx;
+    }
+    
+    if(this->posX > playerX)
+    {
+        posX-=vx;
+    }
+    
+    if(this->posY < playerY)
+    {
+        posY+=vy;
+    }
+    
+    if(this->posY > playerY)
+    {
+        posY-=vy;
+    }
+}
+
+/*
+void BasicEnemy::death()
+{
+    this->~BasicEnemy();
+}
+*/

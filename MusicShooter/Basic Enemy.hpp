@@ -16,12 +16,17 @@
 class BasicEnemy
 {
 public:
-    BasicEnemy(SDL_Renderer* r, float x, float y, LTexture* spriteSheetTexture);
+    BasicEnemy(SDL_Renderer* r, LTexture* spriteSheetTexture, float x, float y);
     ~BasicEnemy();
+    
+    //stores player position
+    float playerX, playerY;
     
     bool loadSheet();
     void update();
     void draw();
+    //void death();
+    void followPlayer();
     
 private:
     float posX, posY;
