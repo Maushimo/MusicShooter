@@ -24,6 +24,9 @@ public:
     
     float posX, posY;
     
+    int bulletCount;
+    std::vector<Bullet*> bullets;
+    
     bool loadSheet();
     void update();
     void draw(int mouseX, int mouseY);
@@ -55,11 +58,6 @@ private:
     float speed = 10;
     float drag = 0.5;
     double angle;
-    
-    int bulletCount;
-    //Bullet* bullets[10];
-    std::vector<Bullet*> bullets;
-    
     
     LTexture* gSpriteSheetTexture;
     SDL_Rect gSpriteClip;

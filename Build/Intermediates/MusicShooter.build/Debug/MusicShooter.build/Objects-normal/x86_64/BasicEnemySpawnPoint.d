@@ -45,6 +45,8 @@ dependencies: \
   /Library/Frameworks/SDL2.framework/Headers/SDL_system.h \
   /Library/Frameworks/SDL2.framework/Headers/SDL_timer.h \
   /Library/Frameworks/SDL2.framework/Headers/SDL_version.h \
-  /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/Basic\ Enemy.hpp \
+  /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/Player.hpp \
   /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/LTexture.hpp \
-  /Library/Frameworks/SDL2_image.framework/Headers/SDL_image.h
+  /Library/Frameworks/SDL2_image.framework/Headers/SDL_image.h \
+  /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/Bullet.hpp \
+  /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/Basic\ Enemy.hpp

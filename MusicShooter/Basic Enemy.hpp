@@ -12,6 +12,7 @@
 #include <SDL2/SDL.h>
 #include "LTexture.hpp"
 #include <iostream>
+#include <string>
 
 class BasicEnemy
 {
@@ -27,6 +28,8 @@ public:
     void draw();
     //void death();
     void followPlayer();
+    
+    bool bulletCollide(float bulletX, float bulletY, float bulletWidth, float bulletHeight, std::string tag);
     
 private:
     //enemy position and size

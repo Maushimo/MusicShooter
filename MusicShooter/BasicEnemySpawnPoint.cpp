@@ -8,7 +8,7 @@
 
 #include "BasicEnemySpawnPoint.hpp"
 
-BasicEnemySpawnPoint::BasicEnemySpawnPoint(SDL_Renderer* r, LTexture* texture, float x, float y)
+BasicEnemySpawnPoint::BasicEnemySpawnPoint(SDL_Renderer* r, LTexture* texture, Player* p, float x, float y)
 {
     posX = x;
     posY = y;
@@ -17,6 +17,8 @@ BasicEnemySpawnPoint::BasicEnemySpawnPoint(SDL_Renderer* r, LTexture* texture, f
     
     gRenderer = r;
     enemySpriteSheet = texture;
+    
+    player = p;
 }
 
 BasicEnemySpawnPoint::~BasicEnemySpawnPoint()
@@ -45,7 +47,7 @@ void BasicEnemySpawnPoint::spawnEnemy()
         return;
     }else
     {
-        enemies[enemyCount] = new BasicEnemy(gRenderer, enemySpriteSheet, posX, posY);
+        enemies.push_back(new BasicEnemy(gRenderer, enemySpriteSheet, posX, posY));
         enemyCount++;
     }
 }
@@ -54,7 +56,19 @@ void BasicEnemySpawnPoint::spawnerUpdate()
 {
     for(int i = 0; i < enemyCount; i++)
     {
-        enemies[i]->update();
+        if(enemies[i] != NULL)
+        {
+            enemies[i]->update();
+        
+            for(int j = 0; j < player->bulletCount; j++)
+            {
+                if(enemies[i]->bulletCollide(player->bullets[j]->posX, player->bullets[j]->posY, player->bullets[j]->width, player->bullets[j]->height, player->bullets[j]->tag))
+                {
+                    this->removeEnemy(i);
+                    return;
+                }
+            }
+        }
     }
 }
 
@@ -62,7 +76,10 @@ void BasicEnemySpawnPoint::spawnerDraw()
 {
     for(int i = 0; i < enemyCount; i++)
     {
-        enemies[i]->draw();
+        if(enemies[i] != NULL)
+        {
+            enemies[i]->draw();
+        }
     }
 }
 
@@ -73,4 +90,12 @@ void BasicEnemySpawnPoint::setPlayerPosition(float playerX, float playerY)
         enemies[i]->playerX = playerX;
         enemies[i]->playerY = playerY;
     }
+}
+
+void BasicEnemySpawnPoint::removeEnemy(int i)
+{
+    enemies.erase(enemies.begin()+i);
+    enemyCount--;
+    
+    //std::cout << "Enemy is dead. Current enemy count: " << enemyCount << std::endl;
 }

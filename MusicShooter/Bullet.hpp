@@ -12,12 +12,17 @@
 #include "LTexture.hpp"
 #include <SDL2/SDL.h>
 #include <iostream>
+#include <string>
 
 class Bullet
 {
 public:
-    Bullet(SDL_Renderer* r, LTexture* texture, float x, float y, float mX, float mY, int sWidth, int sHeight, double playerAngle);
+    Bullet(SDL_Renderer* r, LTexture* texture, float x, float y, int sWidth, int sHeight, double playerAngle);
     ~Bullet();
+    
+    float posX, posY;
+    float width, height;
+    std::string tag = "BULLET";
     
     bool loadSheet();
     
@@ -26,11 +31,11 @@ public:
     
     bool checkOffScreen();
     
+   // bool isCollided(float entityX, float entityY, float entityW, float entityH);
+    
     bool isOffScreen;
     
 private:
-    float posX, posY;
-    float width, height;
     float vx;
     float vy;
     float speed = 10;

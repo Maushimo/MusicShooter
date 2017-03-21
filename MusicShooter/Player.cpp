@@ -84,14 +84,13 @@ void Player::update()
             {
                 //delete it from the array (might actually be deleting renderer too!)
                 //delete bullets[i];
-                //then set the pointer to NULL
-                //bullets[i] = NULL;
                 bullets.erase(bullets.begin()+i);
                 
                 //decrease the number of bullets on screen
                 bulletCount--;
                 
-                std::cout << "Bullet Deleted. Current BulletCount: " << bulletCount << std::endl;
+                //std::cout << "Bullet Deleted. Current BulletCount: " << bulletCount << std::endl;
+                return;
             }else{
                 //call it's update function!
                 bullets[i]->update();
@@ -264,7 +263,7 @@ void Player::moveDown()
      {
          bulletCount++;
          
-         bullets.push_back(new Bullet(gRenderer, gSpriteSheetTexture, (this->posX+size/4), this->posY,this->mouseX, this->mouseY, SCREEN_WIDTH, SCREEN_HEIGHT, this->angle));
+         bullets.push_back(new Bullet(gRenderer, gSpriteSheetTexture, (this->posX+size/4), this->posY, SCREEN_WIDTH, SCREEN_HEIGHT, this->angle));
          
          std::cout << "Player BulletCount: " << bulletCount << std::endl;
      }else

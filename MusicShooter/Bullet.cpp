@@ -8,7 +8,7 @@
 
 #include "Bullet.hpp"
 
-Bullet::Bullet(SDL_Renderer* r,LTexture* texture, float x, float y, float mX, float mY, int sWidth, int sHeight, double playerAngle)
+Bullet::Bullet(SDL_Renderer* r,LTexture* texture, float x, float y, int sWidth, int sHeight, double playerAngle)
 {
     gSpriteSheetTexture = texture;
     gRenderer = r;
@@ -184,3 +184,20 @@ bool Bullet::checkOffScreen()
     }
     return success;
 }
+
+/*
+bool Bullet::isCollided(float entityX, float entityY, float entityW, float entityH)
+{
+    bool success = false;
+    
+    if(this->posX > entityX && this->posX < (entityX+entityW))
+    {
+        if(this->posY > entityY && this->posY < (entityY+entityH))
+        {
+            success = true;
+        }
+    }
+    
+    return success;
+}
+*/

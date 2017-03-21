@@ -58,9 +58,9 @@ bool init()
     //init entities
     player = new Player(gRenderer, gSpriteSheetTexture, SCREEN_WIDTH, SCREEN_HEIGHT);
     
-    bEnemySpawner[0] = new BasicEnemySpawnPoint(gRenderer, gSpriteSheetTexture, SCREEN_WIDTH/4, 50);
-    bEnemySpawner[1] = new BasicEnemySpawnPoint(gRenderer, gSpriteSheetTexture, SCREEN_WIDTH/2, 50);
-    bEnemySpawner[2] = new BasicEnemySpawnPoint(gRenderer, gSpriteSheetTexture, 0, 50);
+    bEnemySpawner[0] = new BasicEnemySpawnPoint(gRenderer, gSpriteSheetTexture, player, SCREEN_WIDTH/4, 50);
+    bEnemySpawner[1] = new BasicEnemySpawnPoint(gRenderer, gSpriteSheetTexture, player, SCREEN_WIDTH/2, 50);
+    bEnemySpawner[2] = new BasicEnemySpawnPoint(gRenderer, gSpriteSheetTexture, player, 0, 50);
     
     audio = new Audio();
 
@@ -112,14 +112,6 @@ int main(int argc, char const *argv[])
                 if(e.type == SDL_QUIT)
                 {
                     quit = true;
-                }
-                
-                if(e.type == SDL_MOUSEBUTTONDOWN)
-                {
-                    if(e.button.button == SDL_BUTTON_LEFT)
-                    {
-                        player->shoot();
-                    }
                 }
             }
             

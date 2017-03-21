@@ -116,6 +116,21 @@ void BasicEnemy::followPlayer()
     }
 }
 
+bool BasicEnemy::bulletCollide(float bulletX, float bulletY, float bulletWidth, float bulletHeight, std::string path)
+{
+    bool success = false;
+    
+    if(bulletX > this->posX && bulletX < (this->posX+this->size))
+    {
+        if(bulletY > this->posY && bulletY < (this->posY+this->size))
+        {
+            success = true;
+        }
+    }
+    
+    return success;
+}
+
 /*
 void BasicEnemy::death()
 {
