@@ -28,8 +28,11 @@ public:
     
     void muteDrums();
     void muteBass();
+    void playDrums();
+    void playBass();
     
     bool isPlayed;
+    bool isLoaded;
 };
 
 #endif /* Audio_hpp */

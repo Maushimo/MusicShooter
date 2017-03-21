@@ -29,9 +29,13 @@ public:
     void followPlayer();
     
 private:
+    //enemy position and size
     float posX, posY;
     float size = 51;
+    //(simple) enemy physics
     float vx, vy;
+    float speed = 3;
+    float drag = 0.5;
     //double angle;
     
     LTexture* gSpriteSheetTexture;

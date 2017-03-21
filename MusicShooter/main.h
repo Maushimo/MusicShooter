@@ -17,7 +17,6 @@
 #include "BasicEnemySpawnPoint.hpp"
 #include "Audio.hpp"
 #include <iostream>
-#include <thread>
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -38,6 +37,7 @@ Player* player;
 BasicEnemySpawnPoint* bEnemySpawner[3];
 Audio* audio;
 
+//store mouse position
 int mouseX, mouseY;
 
 #endif /* main_h */

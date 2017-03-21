@@ -55,7 +55,8 @@ bool init()
     gSpriteSheetTexture = new LTexture(gRenderer);
     gSpriteSheetTexture->loadFromFile("data/spritesheet.png");
     
-    player = new Player(gRenderer, SCREEN_WIDTH, SCREEN_HEIGHT, gSpriteSheetTexture);
+    //init entities
+    player = new Player(gRenderer, gSpriteSheetTexture, SCREEN_WIDTH, SCREEN_HEIGHT);
     
     bEnemySpawner[0] = new BasicEnemySpawnPoint(gRenderer, gSpriteSheetTexture, SCREEN_WIDTH/4, 50);
     bEnemySpawner[1] = new BasicEnemySpawnPoint(gRenderer, gSpriteSheetTexture, SCREEN_WIDTH/2, 50);
@@ -112,6 +113,14 @@ int main(int argc, char const *argv[])
                 {
                     quit = true;
                 }
+                
+                if(e.type == SDL_MOUSEBUTTONDOWN)
+                {
+                    if(e.button.button == SDL_BUTTON_LEFT)
+                    {
+                        player->shoot();
+                    }
+                }
             }
             
             //Get Mouse Position
@@ -122,6 +131,7 @@ int main(int argc, char const *argv[])
             SDL_RenderClear(gRenderer);
             
             player->movementKeys();
+            player->shootKeys();
             
             const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
             
@@ -135,13 +145,25 @@ int main(int argc, char const *argv[])
                 audio->muteBass();
             }
             
+            if( currentKeyStates[ SDL_SCANCODE_3])
+            {
+                audio->playDrums();
+            }
+            
+            if( currentKeyStates[ SDL_SCANCODE_4])
+            {
+                audio->playBass();
+            }
+            
             player->update();
             player->draw(mouseX, mouseY);
             
             for(int i=0;i<3;i++)
             {
                 bEnemySpawner[i]->setPlayerPosition(player->posX, player->posY);
+                
                 bEnemySpawner[i]->spawnEnemy();
+                
                 bEnemySpawner[i]->spawnerUpdate();
                 bEnemySpawner[i]->spawnerDraw();
             }
@@ -149,7 +171,7 @@ int main(int argc, char const *argv[])
             //Update Screen
             SDL_RenderPresent(gRenderer);
             
-            //audio->playMusic();
+            audio->playMusic();
         }
     }
     

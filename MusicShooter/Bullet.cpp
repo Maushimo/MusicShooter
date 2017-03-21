@@ -8,64 +8,179 @@
 
 #include "Bullet.hpp"
 
-Bullet::Bullet(SDL_Renderer* r, int sWidth, int sHeight)
+Bullet::Bullet(SDL_Renderer* r,LTexture* texture, float x, float y, float mX, float mY, int sWidth, int sHeight, double playerAngle)
 {
+    gSpriteSheetTexture = texture;
     gRenderer = r;
+    
+    posX = x;
+    posY = y;
+    
+    angle = playerAngle;
+    
+    /* abandoned mouse control
+    if(mX > x)
+    {
+        projectedPosX = float( ((mX-x) * sin(angle)) );
+        projectedPosY = float( ((mY-y) * cos(angle)) );
+    }else if(y > mY)
+    {
+        projectedPosX = float( ((x-mX) * sin(angle)) );
+        projectedPosY = float( ((y-mY) * cos(angle)) );
+    }
+     */
+    
+    /* THE ANGLES PASSED THROUGH FROM THE PLAYER MAKE NO SENSE HERE, SO YES THE ANGLES ARE TECHNICALLY WRONG */
+    if(angle == 90)
+    {
+        projectedPosX = posX;
+        projectedPosY = posY * -10;
+        
+        //std::cout << "Firing UP. ANGLE: " << angle << std::endl;
+    }
+    else if(angle == 180)
+    {
+        projectedPosX = posX * 10;
+        projectedPosY = posY;
+        
+        //std::cout << "Firing RIGHT. ANGLE: " << angle << std::endl;
+    }
+    else if(angle == -90)
+    {
+        projectedPosX = posX;
+        projectedPosY = posY * 10;
+        
+        //std::cout << "Firing DOWN. ANGLE: " << angle << std::endl;
+    }
+    else if(angle == 0)
+    {
+        projectedPosX = posX * -10;
+        projectedPosY = posY;
+        
+        //std::cout << "Firing LEFT. ANGLE: " << angle << std::endl;
+    }else if(angle == 45)
+    {
+        projectedPosX = posX * -10;
+        projectedPosY = posY * -10;
+        
+        //std::cout << "Firing UP LEFT. ANGLE: " << angle << std::endl;
+    }
+    else if(angle == 135)
+    {
+        projectedPosX = posX * 10;
+        projectedPosY = posY * -10;
+        
+        //std::cout << "Firing UP RIGHT. ANGLE: " << angle << std::endl;
+    }
+    else if(angle == -45)
+    {
+        projectedPosX = posX * -10;
+        projectedPosY = posY * 10;
+        
+        //std::cout << "Firing DOWN LEFT. ANGLE: " << angle << std::endl;
+    }
+    else if(angle == -135)
+    {
+        projectedPosX = posX * 10;
+        projectedPosY = posY * 10;
+        
+        //std::cout << "Firing DOWN RIGHT. ANGLE: " << angle << std::endl;
+    }
     
     SCREEN_WIDTH = sWidth;
     SCREEN_HEIGHT = sHeight;
+    
+    isOffScreen = false;
 }
 
 Bullet::~Bullet()
 {
+    gSpriteSheetTexture->free();
 }
 
-void Bullet::setPosition(float x, float y)
+bool Bullet::loadSheet()
 {
-    posX = x;
-    posY = y;
+    bool success = true;
+    
+    //clip the sprite needed
+    gSpriteClip.x = 173;
+    gSpriteClip.y = 12;
+    gSpriteClip.w = 29;
+    gSpriteClip.h = 27;
+    
+    return success;
 }
 
 void Bullet::update()
 {
-    //constantly adding velocity
-    this->posX+=this->vx;
-    this->posY+=this->vy;
+    isOffScreen = this->checkOffScreen();
+    
+    posX+=vx;
+    posY+=vy;
+    
+    if(this->posX < projectedPosX)
+    {
+        if(vx < speed)
+        {
+            vx++;
+        }
+    }
+    else if(this->posX > projectedPosX)
+    {
+        if(vx > -speed)
+        {
+            vx--;
+        }
+    }
+    
+    if(this->posY < projectedPosY)
+    {
+        if(vy < speed)
+        {
+            vy++;
+        }
+    }
+    else if(this->posY > projectedPosY)
+    {
+        if(vy > -speed)
+        {
+            vy--;
+        }
+    }
 }
 
 void Bullet::draw()
 {
-    SDL_SetRenderDrawColor(gRenderer, 128, 128, 128, 255);
-    SDL_RenderDrawRect(gRenderer, &drawnBullet);
-}
-
-void Bullet::moveUp()
-{
-    if(vy > -speed){
-        vy++;
-    }
-}
-
-void Bullet::moveDown()
-{
-    if(vy < speed)
+    if(!this->loadSheet())
     {
-        vy--;
+        printf("Cannot draw bullet sprite");
+        return;
+    }else
+    {
+    gSpriteSheetTexture->render(posX, posY, &gSpriteClip, angle, NULL, SDL_FLIP_NONE);
     }
 }
 
-void Bullet::moveLeft()
+bool Bullet::checkOffScreen()
 {
-    if(vx < speed)
+    bool success = false;
+    
+    //check if the bullet goes off screen
+    if(this->posX < 0 || this->posX > SCREEN_WIDTH)
     {
-        vx--;
+        success = true;
     }
-}
-
-void Bullet::moveRight()
-{
-    if(vx > -speed)
+    if(this->posY < 0 || this->posY > SCREEN_HEIGHT)
     {
-        vx++;
+        success = true;
     }
+    
+    if(posX == projectedPosX)
+    {
+        if(posY == projectedPosY)
+        {
+            success = true;
+        }
+    }
+    return success;
 }

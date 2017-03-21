@@ -38,6 +38,34 @@ bool BasicEnemy::loadSheet()
 
 void BasicEnemy::update()
 {
+    posX+=vx;
+    posY+=vy;
+    
+    //handle drag
+    if(vx > 0)
+    {
+        vx-=drag;
+    }else if(vx < 0)
+    {
+        vx+=drag;
+    }
+    if(vy > 0)
+    {
+        vy-=drag;
+    }else if(vy < 0)
+    {
+        vy+=drag;
+    }
+    
+    if(vx < drag && vx > -drag)
+    {
+        vx = 0;
+    }
+    if(vy < drag && vy > -drag)
+    {
+        vy = 0;
+    }
+    
     this->followPlayer();
 }
 
@@ -57,22 +85,34 @@ void BasicEnemy::followPlayer()
 {
     if(this->posX < playerX)
     {
-        posX+=vx;
+        if(vx < speed)
+        {
+            vx++;
+        }
     }
     
     if(this->posX > playerX)
     {
-        posX-=vx;
+        if(vx > -speed)
+        {
+            vx--;
+        }
     }
     
     if(this->posY < playerY)
     {
-        posY+=vy;
+        if(vy < speed)
+        {
+            vy++;
+        }
     }
     
     if(this->posY > playerY)
     {
-        posY-=vy;
+        if(vy > -speed)
+        {
+            vy--;
+        }
     }
 }
 

@@ -11,6 +11,7 @@
 Audio::Audio()
 {
     isPlayed = false;
+    isLoaded = false;
     this->loadMusic();
 }
 
@@ -31,10 +32,11 @@ Audio::~Audio()
 bool Audio::loadMusic()
 {
     bool success = true;
-    kickSnare = Mix_LoadWAV("data/audio/kickSnare.wav");
-    bass = Mix_LoadWAV("data/audio/bass.wav");
-    chords = Mix_LoadWAV("data/audio/chords.wav");
-    lead = Mix_LoadWAV("data/audio/lead.wav");
+    
+    kickSnare = Mix_LoadWAV("data/audio/kickSnare.ogg");
+    bass = Mix_LoadWAV("data/audio/bass.ogg");
+    chords = Mix_LoadWAV("data/audio/chords.ogg");
+    lead = Mix_LoadWAV("data/audio/lead.ogg");
     
     if(kickSnare == NULL || bass == NULL || chords == NULL || lead == NULL)
     {
@@ -42,12 +44,14 @@ bool Audio::loadMusic()
         success = false;
     }
     
+    isLoaded = success;
+    
     return success;
 }
 
 void Audio::playMusic()
 {
-    if(!this->loadMusic())
+    if(!isLoaded)
     {
         printf("Can't play music.");
         return;
@@ -72,4 +76,14 @@ void Audio::muteDrums()
 void Audio::muteBass()
 {
     Mix_Volume(1, 0);
+}
+
+void Audio::playDrums()
+{
+    Mix_Volume(0, 128);
+}
+
+void Audio::playBass()
+{
+    Mix_Volume(1, 128);
 }

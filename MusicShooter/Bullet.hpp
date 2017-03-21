@@ -9,34 +9,42 @@
 #ifndef Bullet_hpp
 #define Bullet_hpp
 
+#include "LTexture.hpp"
 #include <SDL2/SDL.h>
 #include <iostream>
 
 class Bullet
 {
 public:
-    Bullet(SDL_Renderer* r, int sWidth, int sHeight);
+    Bullet(SDL_Renderer* r, LTexture* texture, float x, float y, float mX, float mY, int sWidth, int sHeight, double playerAngle);
     ~Bullet();
+    
+    bool loadSheet();
     
     void update();
     void draw();
     
-    void setPosition(float x, float y);
+    bool checkOffScreen();
     
-    void moveUp();
-    void moveDown();
-    void moveLeft();
-    void moveRight();
+    bool isOffScreen;
     
 private:
     float posX, posY;
     float width, height;
-    float vx = 2;
-    float vy = 2;
+    float vx;
+    float vy;
     float speed = 10;
+    float drag = 0.5;
     
-    SDL_Rect drawnBullet;
+    double angle;
     
+    //store projected position for bullet to fly towards
+    float projectedPosX, projectedPosY;
+    
+    //GLOBAL VARIABLES
+    LTexture* gSpriteSheetTexture;
+    SDL_Rect gSpriteClip;
+
     SDL_Renderer* gRenderer;
     int SCREEN_WIDTH, SCREEN_HEIGHT;
 };

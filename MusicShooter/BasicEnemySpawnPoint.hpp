@@ -13,6 +13,7 @@
 #include "Basic Enemy.hpp"
 #include "LTexture.hpp"
 #include <iostream>
+#include <chrono>
 
 class BasicEnemySpawnPoint
 {
@@ -33,6 +34,7 @@ private:
     int enemyCount;
     //max amount of enemies that can be spawned at one time
     const static int enemyLimit = 10;
+    
     BasicEnemy* enemies[enemyLimit];
     
     //position of spawnpoint
