@@ -18,19 +18,7 @@ Bullet::Bullet(SDL_Renderer* r,LTexture* texture, float x, float y, int sWidth, 
     
     angle = playerAngle;
     
-    /* abandoned mouse control
-    if(mX > x)
-    {
-        projectedPosX = float( ((mX-x) * sin(angle)) );
-        projectedPosY = float( ((mY-y) * cos(angle)) );
-    }else if(y > mY)
-    {
-        projectedPosX = float( ((x-mX) * sin(angle)) );
-        projectedPosY = float( ((y-mY) * cos(angle)) );
-    }
-     */
-    
-    /* THE ANGLES PASSED THROUGH FROM THE PLAYER MAKE NO SENSE HERE, SO YES THE ANGLES ARE TECHNICALLY WRONG */
+    /* APPARENTLY I AM WRONG AND THEY DO MAKE SENSE */
     if(angle == 90)
     {
         projectedPosX = posX;
@@ -184,20 +172,3 @@ bool Bullet::checkOffScreen()
     }
     return success;
 }
-
-/*
-bool Bullet::isCollided(float entityX, float entityY, float entityW, float entityH)
-{
-    bool success = false;
-    
-    if(this->posX > entityX && this->posX < (entityX+entityW))
-    {
-        if(this->posY > entityY && this->posY < (entityY+entityH))
-        {
-            success = true;
-        }
-    }
-    
-    return success;
-}
-*/

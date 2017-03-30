@@ -137,16 +137,6 @@ int main(int argc, char const *argv[])
                 audio->muteBass();
             }
             
-            if( currentKeyStates[ SDL_SCANCODE_3])
-            {
-                audio->playDrums();
-            }
-            
-            if( currentKeyStates[ SDL_SCANCODE_4])
-            {
-                audio->playBass();
-            }
-            
             player->update();
             player->draw(mouseX, mouseY);
             
@@ -163,6 +153,9 @@ int main(int argc, char const *argv[])
             //Update Screen
             SDL_RenderPresent(gRenderer);
             
+            //Update layer volumes
+            audio->update(bEnemySpawner[0]->totalEnemiesKilled, bEnemySpawner[1]->totalEnemiesKilled);
+            //then play music
             audio->playMusic();
         }
     }

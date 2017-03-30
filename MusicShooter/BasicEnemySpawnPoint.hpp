@@ -16,12 +16,15 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <chrono>
 
 class BasicEnemySpawnPoint
 {
 public:
     BasicEnemySpawnPoint(SDL_Renderer* r, LTexture* texture, Player* p, float x, float y);
     ~BasicEnemySpawnPoint();
+    
+    int totalEnemiesKilled;
     
     bool underEnemyCount();
     void spawnEnemy();
@@ -41,6 +44,10 @@ private:
     
     //position of spawnpoint
     float posX, posY;
+    
+    //spawner timer stuff
+    float startTime;
+    float deltaTime;
     
     //global stuff to be passed in
     LTexture* enemySpriteSheet;

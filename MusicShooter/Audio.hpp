@@ -18,18 +18,26 @@ public:
     Audio();
     ~Audio();
     
+    //track layers
     Mix_Chunk* kickSnare;
     Mix_Chunk* bass;
     Mix_Chunk* chords;
     Mix_Chunk* lead;
     
+    //layer volumes
+    int kickSnareVol;
+    int bassVol;
+    int chordsVol;
+    int leadVol;
+    
     bool loadMusic();
     void playMusic();
     
+    void update(int enemiesKilled1, int enemiesKilled2);
+    
+    //mute layers
     void muteDrums();
     void muteBass();
-    void playDrums();
-    void playBass();
     
     bool isPlayed;
     bool isLoaded;

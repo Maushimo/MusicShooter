@@ -24,6 +24,7 @@ public:
     
     float posX, posY;
     
+    //amount of bullets on screen
     int bulletCount;
     std::vector<Bullet*> bullets;
     
@@ -42,6 +43,9 @@ public:
     
     void shoot();
     void death(float entityX, float entityY, float entityW, float entityH);
+    
+    //function to 'kill' bullet when it collides with enemies
+    void killBullet(int bulletIndex);
     
 private:
     //float posX, posY;

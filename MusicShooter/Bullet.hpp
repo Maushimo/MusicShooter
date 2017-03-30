@@ -31,8 +31,6 @@ public:
     
     bool checkOffScreen();
     
-   // bool isCollided(float entityX, float entityY, float entityW, float entityH);
-    
     bool isOffScreen;
     
 private:

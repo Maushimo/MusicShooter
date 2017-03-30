@@ -19,6 +19,9 @@ BasicEnemySpawnPoint::BasicEnemySpawnPoint(SDL_Renderer* r, LTexture* texture, P
     enemySpriteSheet = texture;
     
     player = p;
+    
+    //Set the start time here
+    startTime = SDL_GetTicks();
 }
 
 BasicEnemySpawnPoint::~BasicEnemySpawnPoint()
@@ -47,13 +50,27 @@ void BasicEnemySpawnPoint::spawnEnemy()
         return;
     }else
     {
-        enemies.push_back(new BasicEnemy(gRenderer, enemySpriteSheet, posX, posY));
-        enemyCount++;
+        //if our timer reaches/goes over 2 seconds...
+        if(deltaTime >= 2)
+        {
+            //spawn an enemy
+            enemies.push_back(new BasicEnemy(gRenderer, enemySpriteSheet, posX, posY));
+            enemyCount++;
+            
+            //then reset timer
+            startTime = SDL_GetTicks();
+            deltaTime = 0;
+        }
     }
 }
 
 void BasicEnemySpawnPoint::spawnerUpdate()
 {
+    //get the change in time and convert it to seconds
+    deltaTime = (SDL_GetTicks() - startTime) / 1000.0f;
+    
+    std::cout << "Spawner Delta Time: " << deltaTime << std::endl;
+    
     for(int i = 0; i < enemyCount; i++)
     {
         if(enemies[i] != NULL)
@@ -64,6 +81,9 @@ void BasicEnemySpawnPoint::spawnerUpdate()
             {
                 if(enemies[i]->bulletCollide(player->bullets[j]->posX, player->bullets[j]->posY, player->bullets[j]->width, player->bullets[j]->height, player->bullets[j]->tag))
                 {
+                    //destroy bullet
+                    player->killBullet(j);
+                    //destroy enemy
                     this->removeEnemy(i);
                     return;
                 }
@@ -96,6 +116,11 @@ void BasicEnemySpawnPoint::removeEnemy(int i)
 {
     enemies.erase(enemies.begin()+i);
     enemyCount--;
+    
+    if(totalEnemiesKilled < 128)
+    {
+        totalEnemiesKilled++;
+    }
     
     //std::cout << "Enemy is dead. Current enemy count: " << enemyCount << std::endl;
 }

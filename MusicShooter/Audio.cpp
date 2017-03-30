@@ -13,6 +13,11 @@ Audio::Audio()
     isPlayed = false;
     isLoaded = false;
     this->loadMusic();
+    
+    kickSnareVol = 0;
+    bassVol = 0;
+    chordsVol = 0;
+    lead = 0;
 }
 
 Audio::~Audio()
@@ -44,6 +49,12 @@ bool Audio::loadMusic()
         success = false;
     }
     
+    //Mute tracks on startup
+    for(int i = 0; i < 3; i++)
+    {
+        Mix_Volume(i, 0);
+    }
+    
     isLoaded = success;
     
     return success;
@@ -59,13 +70,27 @@ void Audio::playMusic()
     {
         if(!isPlayed)
         {
+            //Mix_Volume(2, chordsVol);
+            
             Mix_PlayChannel(0, kickSnare, -1);
             Mix_PlayChannel(1, bass, -1);
             Mix_PlayChannel(2, chords, -1);
             
             isPlayed = true;
         }
+        
+        //updates track volumes every frame
+        Mix_Volume(0, kickSnareVol);
+        Mix_Volume(1, bassVol);
+        Mix_Volume(2, chordsVol);
     }
+}
+
+void Audio::update(int enemiesKilled1, int enemiesKilled2)
+{
+    chordsVol = enemiesKilled1;
+    //second volume control for testing, will delete later
+    kickSnareVol = enemiesKilled2;
 }
 
 void Audio::muteDrums()
@@ -76,14 +101,4 @@ void Audio::muteDrums()
 void Audio::muteBass()
 {
     Mix_Volume(1, 0);
-}
-
-void Audio::playDrums()
-{
-    Mix_Volume(0, 128);
-}
-
-void Audio::playBass()
-{
-    Mix_Volume(1, 128);
 }

@@ -290,3 +290,10 @@ void Player::death(float entityX, float entityY, float entityW, float entityH)
         }
     }
 }
+
+void Player::killBullet(int bulletIndex)
+{
+    bullets.erase(bullets.begin()+bulletIndex);
+    bulletCount--;
+    
+}
