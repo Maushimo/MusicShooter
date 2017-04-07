@@ -11,6 +11,7 @@
 
 #include <SDL2_mixer/SDL_mixer.h>
 #include <iostream>
+#include <vector>
 
 class Audio
 {
@@ -22,7 +23,8 @@ public:
     Mix_Chunk* kickSnare;
     Mix_Chunk* bass;
     Mix_Chunk* chords;
-    Mix_Chunk* lead;
+    
+    std::vector<Mix_Chunk*> melodyNotes;
     
     //layer volumes
     int kickSnareVol;
@@ -33,11 +35,9 @@ public:
     bool loadMusic();
     void playMusic();
     
-    void update(int enemiesKilled1, int enemiesKilled2);
+    void playNotes();
     
-    //mute layers
-    void muteDrums();
-    void muteBass();
+    void update(int enemiesKilled);
     
     bool isPlayed;
     bool isLoaded;

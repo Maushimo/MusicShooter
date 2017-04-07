@@ -123,19 +123,7 @@ int main(int argc, char const *argv[])
             SDL_RenderClear(gRenderer);
             
             player->movementKeys();
-            player->shootKeys();
-            
-            const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
-            
-            if( currentKeyStates[ SDL_SCANCODE_1 ] )
-            {
-                audio->muteDrums();
-            }
-            
-            if( currentKeyStates[ SDL_SCANCODE_2 ])
-            {
-                audio->muteBass();
-            }
+            player->shootKeys(audio);
             
             player->update();
             player->draw(mouseX, mouseY);
@@ -154,7 +142,7 @@ int main(int argc, char const *argv[])
             SDL_RenderPresent(gRenderer);
             
             //Update layer volumes
-            audio->update(bEnemySpawner[0]->totalEnemiesKilled, bEnemySpawner[1]->totalEnemiesKilled);
+            audio->update(bEnemySpawner[0]->totalEnemiesKilled);
             //then play music
             audio->playMusic();
         }

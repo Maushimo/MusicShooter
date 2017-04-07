@@ -12,6 +12,7 @@
 #include <SDL2/SDL.h>
 #include "LTexture.hpp"
 #include "Bullet.hpp"
+#include "Audio.hpp"
 #include <iostream>
 #include <vector>
 
@@ -33,8 +34,9 @@ public:
     void draw(int mouseX, int mouseY);
     void boundaries();
     
+    //methods to handle key presses
     void movementKeys();
-    void shootKeys();
+    void shootKeys(Audio* a);
     
     void moveLeft();
     void moveRight();

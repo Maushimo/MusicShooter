@@ -49,4 +49,6 @@ dependencies: \
   /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/LTexture.hpp \
   /Library/Frameworks/SDL2_image.framework/Headers/SDL_image.h \
   /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/Bullet.hpp \
+  /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/Audio.hpp \
+  /Library/Frameworks/SDL2_mixer.framework/Headers/SDL_mixer.h \
   /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/Basic\ Enemy.hpp

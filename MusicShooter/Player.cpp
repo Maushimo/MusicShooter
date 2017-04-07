@@ -175,7 +175,7 @@ void Player::movementKeys()
     }
 }
 
-void Player::shootKeys()
+void Player::shootKeys(Audio* a)
 {
     const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
     
@@ -184,21 +184,29 @@ void Player::shootKeys()
     {
         this->angle = 90;
         this->shoot();
+        
+        a->playNotes();
     }
     if( currentKeyStates[ SDL_SCANCODE_DOWN ] )
     {
         this->angle = -90;
         this->shoot();
+        
+        a->playNotes();
     }
     if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
     {
         this->angle = 0;
         this->shoot();
+        
+        a->playNotes();
     }
     if( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
     {
         this->angle = 180;
         this->shoot();
+        
+        a->playNotes();
     }
     
     /* DIAGONAL */
