@@ -10,7 +10,9 @@
 #define LTexture_hpp
 
 #include <SDL2/SDL.h>
+#include <SDL2_ttf/SDL_ttf.h>
 #include <SDL2_image/SDL_image.h>
+
 #include <iostream>
 
 //-----TEXTURE WRAPPER CLASS-----//
@@ -22,6 +24,9 @@ public:
     
     //Deallocates memory
     ~LTexture();
+    
+    //creates image from true type font
+    bool loadFromRenderedText( std::string textureText, SDL_Color colour );
     
     //Loads image at specified path
     bool loadFromFile( std::string path );
@@ -41,6 +46,9 @@ public:
     //Renders texture at given point
     void render( int x, int y, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE );
     
+    //loads ttf into gFont
+    void loadFont(std::string path, int size);
+    
     //Gets image dimensions
     int getWidth();
     int getHeight();
@@ -50,6 +58,8 @@ private:
     SDL_Texture* mTexture;
     
     SDL_Renderer* gRenderer;
+    
+    TTF_Font* gFont;
     
     //Image dimensions
     int mWidth;

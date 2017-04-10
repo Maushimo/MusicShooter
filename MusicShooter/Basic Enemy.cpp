@@ -131,9 +131,17 @@ bool BasicEnemy::bulletCollide(float bulletX, float bulletY, float bulletWidth, 
     return success;
 }
 
-/*
-void BasicEnemy::death()
+int BasicEnemy::getPosX()
 {
-    this->~BasicEnemy();
+    return this->posX;
 }
-*/
+
+int BasicEnemy::getPosY()
+{
+    return this->posY;
+}
+
+int BasicEnemy::getSize()
+{
+    return this->size;
+}

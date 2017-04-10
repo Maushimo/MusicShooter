@@ -46,4 +46,5 @@ dependencies: \
   /Library/Frameworks/SDL2.framework/Headers/SDL_system.h \
   /Library/Frameworks/SDL2.framework/Headers/SDL_timer.h \
   /Library/Frameworks/SDL2.framework/Headers/SDL_version.h \
+  /Library/Frameworks/SDL2_ttf.framework/Headers/SDL_ttf.h \
   /Library/Frameworks/SDL2_image.framework/Headers/SDL_image.h

@@ -18,6 +18,7 @@ Player::Player(SDL_Renderer* r, LTexture* texture, int sWidth, int sHeight)
     posX = (SCREEN_WIDTH/2)-size/2;
     posY = (SCREEN_HEIGHT/2)-size/2;
     angle = 0.0;
+    health = 100;
     
     bulletCount = -1;
 }
@@ -97,6 +98,8 @@ void Player::update()
             }
         }
     }
+    
+    std::cout << "Player Health: " << this->health << std::endl;
 }
 
 void Player::draw(int mouseX, int mouseY)
@@ -185,28 +188,28 @@ void Player::shootKeys(Audio* a)
         this->angle = 90;
         this->shoot();
         
-        a->playNotes();
+        //a->playPerc();
     }
     if( currentKeyStates[ SDL_SCANCODE_DOWN ] )
     {
         this->angle = -90;
         this->shoot();
         
-        a->playNotes();
+        //a->playPerc();
     }
     if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
     {
         this->angle = 0;
         this->shoot();
         
-        a->playNotes();
+        //a->playPerc();
     }
     if( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
     {
         this->angle = 180;
         this->shoot();
         
-        a->playNotes();
+        //a->playPerc();
     }
     
     /* DIAGONAL */
@@ -273,16 +276,16 @@ void Player::moveDown()
          
          bullets.push_back(new Bullet(gRenderer, gSpriteSheetTexture, (this->posX+size/4), this->posY, SCREEN_WIDTH, SCREEN_HEIGHT, this->angle));
          
-         std::cout << "Player BulletCount: " << bulletCount << std::endl;
+         //std::cout << "Player BulletCount: " << bulletCount << std::endl;
      }else
      {
-         std::cout << "Cannot fire" << std::endl;
+         //std::cout << "Cannot fire" << std::endl;
          return;
      }
      
  }
 
-void Player::death(float entityX, float entityY, float entityW, float entityH)
+void Player::isHit(float entityX, float entityY, float entityW, float entityH)
 {
     if(posX > entityX)
     {
@@ -292,7 +295,7 @@ void Player::death(float entityX, float entityY, float entityW, float entityH)
             {
                 if(posY < entityY+entityH)
                 {
-                    this->~Player();
+                    health-=0.02;
                 }
             }
         }
@@ -303,5 +306,16 @@ void Player::killBullet(int bulletIndex)
 {
     bullets.erase(bullets.begin()+bulletIndex);
     bulletCount--;
+}
+
+void Player::reset()
+{
+    //basically copy the constructors code
+    posX = (SCREEN_WIDTH/2)-size/2;
+    posY = (SCREEN_HEIGHT/2)-size/2;
     
+    angle = 0.0;
+    health = 100;
+    
+    bulletCount = -1;
 }

@@ -24,7 +24,7 @@ public:
     Mix_Chunk* bass;
     Mix_Chunk* chords;
     
-    std::vector<Mix_Chunk*> melodyNotes;
+    //std::vector<Mix_Chunk*> addPerc;
     
     //layer volumes
     int kickSnareVol;
@@ -35,7 +35,8 @@ public:
     bool loadMusic();
     void playMusic();
     
-    void playNotes();
+    //MIGHT USE THIS FUNCTION FOR BULLET SOUNDS
+    //void playPerc();
     
     void update(int enemiesKilled);
     

@@ -11,12 +11,15 @@
 		4267B60A1E68463A00A3B6D5 /* LTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4267B6081E68463A00A3B6D5 /* LTexture.cpp */; };
 		4267B60D1E68475200A3B6D5 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4267B60B1E68475200A3B6D5 /* Player.cpp */; };
 		426BF51B1E759F2C00D3FF27 /* Basic Enemy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426BF5191E759F2C00D3FF27 /* Basic Enemy.cpp */; };
+		426E1C401E9BEA8C0053B643 /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 426E1C3E1E9BEA8C0053B643 /* Text.cpp */; };
+		426E1C421E9C25900053B643 /* SDL2_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 426E1C411E9C25900053B643 /* SDL2_ttf.framework */; };
 		42B1D2C01E6EEC5500901B8C /* Bullet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42B1D2BE1E6EEC5500901B8C /* Bullet.cpp */; };
 		42D49DC41E50C79C0096A416 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42D49DC31E50C79C0096A416 /* main.cpp */; };
 		42D49DCC1E50C7B00096A416 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D49DCB1E50C7B00096A416 /* SDL2.framework */; };
 		42D49DCE1E50C7E50096A416 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D49DCD1E50C7E50096A416 /* SDL2_image.framework */; };
 		42E4913C1E708248000C286C /* SDL2_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42E4913B1E708248000C286C /* SDL2_mixer.framework */; };
 		42E4913F1E70825A000C286C /* Audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42E4913D1E70825A000C286C /* Audio.cpp */; };
+		42F30FF01E993A0800350124 /* GameHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42F30FEE1E993A0800350124 /* GameHandler.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,6 +44,9 @@
 		4267B60E1E6848C700A3B6D5 /* main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
 		426BF5191E759F2C00D3FF27 /* Basic Enemy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "Basic Enemy.cpp"; sourceTree = "<group>"; };
 		426BF51A1E759F2C00D3FF27 /* Basic Enemy.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = "Basic Enemy.hpp"; sourceTree = "<group>"; };
+		426E1C3E1E9BEA8C0053B643 /* Text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Text.cpp; sourceTree = "<group>"; };
+		426E1C3F1E9BEA8C0053B643 /* Text.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Text.hpp; sourceTree = "<group>"; };
+		426E1C411E9C25900053B643 /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = ../../../../../../../Library/Frameworks/SDL2_ttf.framework; sourceTree = "<group>"; };
 		42B1D2BE1E6EEC5500901B8C /* Bullet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Bullet.cpp; sourceTree = "<group>"; };
 		42B1D2BF1E6EEC5500901B8C /* Bullet.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Bullet.hpp; sourceTree = "<group>"; };
 		42B1D2C11E6EEC8D00901B8C /* libNsound.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libNsound.dylib; path = MusicShooter/libNsound.dylib; sourceTree = "<group>"; };
@@ -52,6 +58,8 @@
 		42E4913B1E708248000C286C /* SDL2_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_mixer.framework; path = ../../../../../../../Library/Frameworks/SDL2_mixer.framework; sourceTree = "<group>"; };
 		42E4913D1E70825A000C286C /* Audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Audio.cpp; sourceTree = "<group>"; };
 		42E4913E1E70825A000C286C /* Audio.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Audio.hpp; sourceTree = "<group>"; };
+		42F30FEE1E993A0800350124 /* GameHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameHandler.cpp; sourceTree = "<group>"; };
+		42F30FEF1E993A0800350124 /* GameHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameHandler.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +69,7 @@
 			files = (
 				42E4913C1E708248000C286C /* SDL2_mixer.framework in Frameworks */,
 				42D49DCE1E50C7E50096A416 /* SDL2_image.framework in Frameworks */,
+				426E1C421E9C25900053B643 /* SDL2_ttf.framework in Frameworks */,
 				42D49DCC1E50C7B00096A416 /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -102,6 +111,10 @@
 				426BF51A1E759F2C00D3FF27 /* Basic Enemy.hpp */,
 				4255B0B21E76CB9F006D6AAE /* BasicEnemySpawnPoint.cpp */,
 				4255B0B31E76CB9F006D6AAE /* BasicEnemySpawnPoint.hpp */,
+				42F30FEE1E993A0800350124 /* GameHandler.cpp */,
+				42F30FEF1E993A0800350124 /* GameHandler.hpp */,
+				426E1C3E1E9BEA8C0053B643 /* Text.cpp */,
+				426E1C3F1E9BEA8C0053B643 /* Text.hpp */,
 			);
 			path = MusicShooter;
 			sourceTree = "<group>";
@@ -109,6 +122,7 @@
 		42D49DCA1E50C7B00096A416 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				426E1C411E9C25900053B643 /* SDL2_ttf.framework */,
 				42E4913B1E708248000C286C /* SDL2_mixer.framework */,
 				42B1D2C11E6EEC8D00901B8C /* libNsound.dylib */,
 				42DE931E1E577921001BF0C6 /* libSDL2_gfx.a */,
@@ -175,6 +189,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				426E1C401E9BEA8C0053B643 /* Text.cpp in Sources */,
+				42F30FF01E993A0800350124 /* GameHandler.cpp in Sources */,
 				4267B60A1E68463A00A3B6D5 /* LTexture.cpp in Sources */,
 				42D49DC41E50C79C0096A416 /* main.cpp in Sources */,
 				4267B60D1E68475200A3B6D5 /* Player.cpp in Sources */,

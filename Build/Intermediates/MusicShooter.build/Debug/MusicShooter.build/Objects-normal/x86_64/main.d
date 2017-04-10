@@ -46,10 +46,13 @@ dependencies: \
   /Library/Frameworks/SDL2.framework/Headers/SDL_timer.h \
   /Library/Frameworks/SDL2.framework/Headers/SDL_version.h \
   /Library/Frameworks/SDL2_image.framework/Headers/SDL_image.h \
+  /Library/Frameworks/SDL2_ttf.framework/Headers/SDL_ttf.h \
   /Library/Frameworks/SDL2_mixer.framework/Headers/SDL_mixer.h \
-  /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/Player.hpp \
   /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/LTexture.hpp \
+  /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/Player.hpp \
   /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/Bullet.hpp \
   /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/Audio.hpp \
   /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/Basic\ Enemy.hpp \
-  /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/BasicEnemySpawnPoint.hpp
+  /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/BasicEnemySpawnPoint.hpp \
+  /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/Text.hpp \
+  /Users/Mohsin/Documents/_PROGRAMMING/C++/Final_Project/MusicShooter/MusicShooter/GameHandler.hpp

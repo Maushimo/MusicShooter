@@ -10,7 +10,9 @@
 #define Basic_Enemy_hpp
 
 #include <SDL2/SDL.h>
+
 #include "LTexture.hpp"
+
 #include <iostream>
 #include <string>
 
@@ -26,10 +28,14 @@ public:
     bool loadSheet();
     void update();
     void draw();
-    //void death();
     void followPlayer();
     
     bool bulletCollide(float bulletX, float bulletY, float bulletWidth, float bulletHeight, std::string tag);
+    
+    /* GETTERS */
+    int getPosX();
+    int getPosY();
+    int getSize();
     
 private:
     //enemy position and size
@@ -39,7 +45,6 @@ private:
     float vx, vy;
     float speed = 3;
     float drag = 0.5;
-    //double angle;
     
     LTexture* gSpriteSheetTexture;
     SDL_Rect gSpriteClip;

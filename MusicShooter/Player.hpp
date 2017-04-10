@@ -10,9 +10,11 @@
 #define Player_hpp
 
 #include <SDL2/SDL.h>
+
 #include "LTexture.hpp"
 #include "Bullet.hpp"
 #include "Audio.hpp"
+
 #include <iostream>
 #include <vector>
 
@@ -23,7 +25,11 @@ public:
     Player(SDL_Renderer* r, LTexture* texture, int sWidth, int sHeight);
     ~Player();
     
+    //player position
     float posX, posY;
+    
+    //player health
+    float health;
     
     //amount of bullets on screen
     int bulletCount;
@@ -44,10 +50,13 @@ public:
     void moveDown();
     
     void shoot();
-    void death(float entityX, float entityY, float entityW, float entityH);
+    void isHit(float entityX, float entityY, float entityW, float entityH);
     
     //function to 'kill' bullet when it collides with enemies
     void killBullet(int bulletIndex);
+    
+    //function to revert player to it's original state
+    void reset();
     
 private:
     //float posX, posY;

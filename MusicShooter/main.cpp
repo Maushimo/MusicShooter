@@ -42,6 +42,13 @@ bool init()
                     success = false;
                 }
                 
+                //init true type fonts
+                if(TTF_Init() == -1)
+                {
+                    printf("SDL_ttf could not init! SDL_ttf Error: %s\n", TTF_GetError());
+                    success = false;
+                }
+                
                 //init SDL_Mixer
                 if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
                 {
@@ -55,14 +62,44 @@ bool init()
     gSpriteSheetTexture = new LTexture(gRenderer);
     gSpriteSheetTexture->loadFromFile("data/spritesheet.png");
     
+    //load font textures
+    gFontTexture = new LTexture(gRenderer);
+    healthFontTexture = new LTexture(gRenderer);
+    
     //init entities
     player = new Player(gRenderer, gSpriteSheetTexture, SCREEN_WIDTH, SCREEN_HEIGHT);
     
-    bEnemySpawner[0] = new BasicEnemySpawnPoint(gRenderer, gSpriteSheetTexture, player, SCREEN_WIDTH/4, 50);
-    bEnemySpawner[1] = new BasicEnemySpawnPoint(gRenderer, gSpriteSheetTexture, player, SCREEN_WIDTH/2, 50);
-    bEnemySpawner[2] = new BasicEnemySpawnPoint(gRenderer, gSpriteSheetTexture, player, 0, 50);
+    /* ENEMY SPAWNER CONSTRUCTION */
+    bEnemySpawner.push_back(new BasicEnemySpawnPoint(gRenderer, gSpriteSheetTexture, player, SCREEN_WIDTH/4, 50));
+    bEnemySpawner.push_back(new BasicEnemySpawnPoint(gRenderer, gSpriteSheetTexture, player, SCREEN_WIDTH/2, 50));
+    bEnemySpawner.push_back(new BasicEnemySpawnPoint(gRenderer, gSpriteSheetTexture, player, 0, 50));
+    bEnemySpawner.push_back(new BasicEnemySpawnPoint(gRenderer, gSpriteSheetTexture, player, SCREEN_WIDTH/6, 50));
+    bEnemySpawner.push_back(new BasicEnemySpawnPoint(gRenderer, gSpriteSheetTexture, player, SCREEN_WIDTH/8, 50));
     
+    //init audio handler
     audio = new Audio();
+    //init game handler
+    gHandler = new GameHandler();
+    
+    gTotalEnemiesKilled = 0;
+    
+    //set initial state
+    GameState = GameStates::PLAYING;
+    
+    /* 'GAME OVER' TEXT SETUP */
+    //set the texture
+    gFontTexture->loadFont("data/American Captain.ttf", 45);
+    
+    //set the text to be displayed
+    gFontTexture->loadFromRenderedText("GAME OVER (Press 'R' to restart)", fontColour);
+    
+    //create text object
+    gText = new Text(gRenderer, gFontTexture, 150, SCREEN_HEIGHT/2);
+    
+    /* 'HEALTH' TEXT SETUP */
+    healthFontTexture->loadFont("data/American Captain.ttf", 25);
+    
+    healthText = new Text(gRenderer, healthFontTexture, 660, 25);
 
     return success;
 }
@@ -88,8 +125,21 @@ void close()
     gRenderer = NULL;
     
     SDL_Quit();
+    TTF_Quit();
     IMG_Quit();
     Mix_Quit();
+}
+
+int sumOfEnemiesKilled()
+{
+    int totalEnemiesKilled;
+    
+    for(int i = 0; i < bEnemySpawner.size(); i++)
+    {
+        totalEnemiesKilled+= bEnemySpawner[i]->totalEnemiesKilled;
+    }
+    
+    return totalEnemiesKilled;
 }
 
 //================================//
@@ -102,16 +152,18 @@ int main(int argc, char const *argv[])
     }
     else
     {
-        bool quit = false;
+        const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
         SDL_Event e;
         
-        while(!quit)
+        //MAIN GAME LOOP
+        while(GameState == GameStates::PLAYING)
         {
             while(SDL_PollEvent(&e) != 0)
             {
                 if(e.type == SDL_QUIT)
                 {
-                    quit = true;
+                    //quit = true;
+                    GameState = GameStates::QUIT;
                 }
             }
             
@@ -128,7 +180,7 @@ int main(int argc, char const *argv[])
             player->update();
             player->draw(mouseX, mouseY);
             
-            for(int i=0;i<3;i++)
+            for(int i=0; i<bEnemySpawner.size(); i++)
             {
                 bEnemySpawner[i]->setPlayerPosition(player->posX, player->posY);
                 
@@ -136,15 +188,73 @@ int main(int argc, char const *argv[])
                 
                 bEnemySpawner[i]->spawnerUpdate();
                 bEnemySpawner[i]->spawnerDraw();
+                
+                for(int j=0; j<bEnemySpawner[i]->enemies.size(); j++)
+                {
+                    //Player collision detection
+                    player->isHit(bEnemySpawner[i]->enemies[j]->getPosX(), bEnemySpawner[i]->enemies[j]->getPosY(), bEnemySpawner[i]->enemies[j]->getSize(), bEnemySpawner[i]->enemies[j]->getSize());
+                    
+                    if(player->health <= 0)
+                    {
+                        GameState = GameStates::GAME_OVER;
+                    }
+                }
+                
+                //update score
+                gTotalEnemiesKilled = sumOfEnemiesKilled();
+                //set score in the handler
+                gHandler->setScore(gTotalEnemiesKilled);
             }
-            
-            //Update Screen
-            SDL_RenderPresent(gRenderer);
             
             //Update layer volumes
             audio->update(bEnemySpawner[0]->totalEnemiesKilled);
             //then play music
             audio->playMusic();
+            
+            healthStream.str("");
+            healthStream << "Health: " << player->health;
+            
+            healthFontTexture->loadFromRenderedText(healthStream.str().c_str(), healthColour);
+            
+            healthText->draw();
+            
+            //Update Screen
+            SDL_RenderPresent(gRenderer);
+            
+            //GAMEOVER STATE
+            while(GameState == GameStates::GAME_OVER)
+            {
+                while(SDL_PollEvent(&e) != 0)
+                {
+                    if(e.type == SDL_QUIT)
+                    {
+                        //quit = true;
+                        GameState = GameStates::QUIT;
+                    }
+                }
+                //Clear Screen (Black Screen for now)
+                SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);
+                SDL_RenderClear(gRenderer);
+                
+                //Press 'R' to reset
+                if( currentKeyStates[ SDL_SCANCODE_R ] )
+                {
+                    GameState = GameStates::PLAYING;
+                    
+                    player->reset();
+                    
+                    for(int i=0;i<bEnemySpawner.size();i++)
+                    {
+                        bEnemySpawner[i]->reset();
+                    }
+                    
+                    gHandler->reset();
+                }
+                
+                gText->draw();
+                
+                SDL_RenderPresent(gRenderer);
+            }
         }
     }
     

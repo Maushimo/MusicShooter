@@ -20,8 +20,12 @@ BasicEnemySpawnPoint::BasicEnemySpawnPoint(SDL_Renderer* r, LTexture* texture, P
     
     player = p;
     
+    totalEnemiesKilled = 0;
+    
     //Set the start time here
     startTime = SDL_GetTicks();
+    //generate a random spawn time
+    timeLimit = rand() % 4;
 }
 
 BasicEnemySpawnPoint::~BasicEnemySpawnPoint()
@@ -51,7 +55,7 @@ void BasicEnemySpawnPoint::spawnEnemy()
     }else
     {
         //if our timer reaches/goes over 2 seconds...
-        if(deltaTime >= 2)
+        if(deltaTime >= timeLimit)
         {
             //spawn an enemy
             enemies.push_back(new BasicEnemy(gRenderer, enemySpriteSheet, posX, posY));
@@ -69,7 +73,7 @@ void BasicEnemySpawnPoint::spawnerUpdate()
     //get the change in time and convert it to seconds
     deltaTime = (SDL_GetTicks() - startTime) / 1000.0f;
     
-    std::cout << "Spawner Delta Time: " << deltaTime << std::endl;
+    //std::cout << "Spawner Delta Time: " << deltaTime << std::endl;
     
     for(int i = 0; i < enemyCount; i++)
     {
@@ -117,10 +121,18 @@ void BasicEnemySpawnPoint::removeEnemy(int i)
     enemies.erase(enemies.begin()+i);
     enemyCount--;
     
-    if(totalEnemiesKilled < 128)
-    {
-        totalEnemiesKilled++;
-    }
+    totalEnemiesKilled++;
     
     //std::cout << "Enemy is dead. Current enemy count: " << enemyCount << std::endl;
+}
+
+void BasicEnemySpawnPoint::reset()
+{
+    for(int i=0;i<enemies.size();i++)
+    {
+        enemies.erase(enemies.begin()+i);
+    }
+    
+    enemyCount = 0;
+    totalEnemiesKilled = 0;
 }

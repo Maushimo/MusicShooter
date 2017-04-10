@@ -11,20 +11,37 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
+#include <SDL2_ttf/SDL_ttf.h>
 #include <SDL2_mixer/SDL_mixer.h>
+
+#include "LTexture.hpp"
 #include "Player.hpp"
 #include "Basic Enemy.hpp"
 #include "BasicEnemySpawnPoint.hpp"
 #include "Audio.hpp"
+#include "Text.hpp"
+#include "GameHandler.hpp"
+
 #include <iostream>
+#include <sstream>
+#include <vector>
+
+enum class GameStates { MAIN_MENU, PLAYING, QUIT, GAME_OVER };
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
+
 //global spritesheet for entities
 LTexture* gSpriteSheetTexture;
+//gameover font texture;
+LTexture* gFontTexture;
+
+std::stringstream healthStream;
+//health font texture;
+LTexture* healthFontTexture;
 
 //runs at the start of the program
 bool init();
@@ -33,9 +50,33 @@ void close();
 //mainly runs checks on the LTextures
 bool loadMedia();
 
+//method to return sum of enemies killed across all spawners
+int sumOfEnemiesKilled();
+
 Player* player;
-BasicEnemySpawnPoint* bEnemySpawner[3];
+
+//vector containing spawners
+std::vector<BasicEnemySpawnPoint*> bEnemySpawner;
+
+//audio handler
 Audio* audio;
+
+//the GLOBAL amount of enemies killed
+int gTotalEnemiesKilled;
+
+//handles stats
+GameHandler* gHandler;
+
+GameStates GameState;
+
+//set the colour
+SDL_Color fontColour = { 255,255,255,255 };
+SDL_Color healthColour = { 0,0,0,255 };
+
+//GAME OVER text
+Text* gText;
+//health text
+Text* healthText;
 
 //store mouse position
 int mouseX, mouseY;

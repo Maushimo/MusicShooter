@@ -10,13 +10,14 @@
 #define BasicEnemySpawnPoint_hpp
 
 #include <SDL2/SDL.h>
+
 #include "Player.hpp"
 #include "Basic Enemy.hpp"
 #include "LTexture.hpp"
+
 #include <iostream>
 #include <vector>
 #include <string>
-#include <chrono>
 
 class BasicEnemySpawnPoint
 {
@@ -24,7 +25,11 @@ public:
     BasicEnemySpawnPoint(SDL_Renderer* r, LTexture* texture, Player* p, float x, float y);
     ~BasicEnemySpawnPoint();
     
+    //sum of enemies killed on current instance of spawner
     int totalEnemiesKilled;
+    
+    //get it? "PUBLIC ENEMIES"?
+    std::vector<BasicEnemy*> enemies;
     
     bool underEnemyCount();
     void spawnEnemy();
@@ -35,12 +40,14 @@ public:
     void setPlayerPosition(float playerX, float playerY);
     void removeEnemy(int i);
     
+    //function to reset the spawner to it's original state
+    void reset();
+    
 private:
     //max amount of enemies that can be spawned at one time
     const int enemyLimit = 10;
     //count of enemies currently on screen
     int enemyCount;
-    std::vector<BasicEnemy*> enemies;
     
     //position of spawnpoint
     float posX, posY;
@@ -48,6 +55,8 @@ private:
     //spawner timer stuff
     float startTime;
     float deltaTime;
+    
+    int timeLimit;
     
     //global stuff to be passed in
     LTexture* enemySpriteSheet;
