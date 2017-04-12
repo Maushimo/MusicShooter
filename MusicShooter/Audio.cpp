@@ -14,19 +14,22 @@ Audio::Audio()
     isLoaded = false;
     this->loadMusic();
     
+    
     //set volumes of each layer
-    kickSnareVol = 0;
-    bassVol = 0;
-    chordsVol = 0;
-    leadVol = 0;
+    for(int i = 0; i < normalTracks.size(); i++)
+    {
+        volume.push_back(0);
+    }
 }
 
 Audio::~Audio()
 {
     //Free music
-    Mix_FreeChunk(kickSnare);
-    Mix_FreeChunk(bass);
-    Mix_FreeChunk(chords);
+    for(int i = 0; i < normalTracks.size(); i++)
+    {
+        Mix_FreeChunk(normalTracks[i]);
+        normalTracks[i] = NULL;
+    }
     
     /*
     for(int i = 0; i < addPerc.size(); i++)
@@ -35,19 +38,21 @@ Audio::~Audio()
         addPerc[i] = NULL;
     }
      */
-    
-    kickSnare = NULL;
-    bass = NULL;
-    chords = NULL;
 }
 
 bool Audio::loadMusic()
 {
     bool success = true;
-    
-    kickSnare = Mix_LoadWAV("data/audio/kickSnare.ogg");
-    bass = Mix_LoadWAV("data/audio/bass.ogg");
-    chords = Mix_LoadWAV("data/audio/chords.ogg");
+
+    //Load kickSnare
+    normalTracks.push_back(new Mix_Chunk());
+    normalTracks[kickSnare] = Mix_LoadWAV("data/audio/kickSnare.ogg");
+    //Load bass
+    normalTracks.push_back(new Mix_Chunk());
+    normalTracks[bass] = Mix_LoadWAV("data/audio/bass.ogg");
+    //Load chords
+    normalTracks.push_back(new Mix_Chunk());
+    normalTracks[chords] = Mix_LoadWAV("data/audio/chords.ogg");
     
     
     /*
@@ -64,20 +69,17 @@ bool Audio::loadMusic()
     addPerc[3] = Mix_LoadWAV("data/audio/randomDrums/conga.ogg");
      */
     
-    if(kickSnare == NULL || bass == NULL || chords == NULL)
+    for(int i=0; i<normalTracks.size();i++)
     {
-        //for(int i = 0; i < addPerc.size(); i++)
-        //{
-            //if(addPerc[i] == NULL)
-            //{
-                printf("Failed to load music.mp3! SDL_Mixer Error: %s\n", Mix_GetError());
-                success = false;
-            //}
-        //}
+        if(normalTracks[i] == NULL)
+        {
+            printf("Failed to load music! SDL_Mixer Error: %s\n", Mix_GetError());
+            success = false;
+        }
     }
     
     //Mute tracks on startup
-    for(int i = 0; i < 4; i++)
+    for(int i = 0; i < normalTracks.size(); i++)
     {
         Mix_Volume(i, 0);
     }
@@ -97,19 +99,19 @@ void Audio::playMusic()
     {
         if(!isPlayed)
         {
-            Mix_PlayChannel(0, kickSnare, -1);
-            Mix_PlayChannel(1, bass, -1);
-            Mix_PlayChannel(2, chords, -1);
+            for(int i = 0; i < normalTracks.size(); i++)
+            {
+                Mix_PlayChannel(i, normalTracks[i], -1);
+            }
             
             isPlayed = true;
         }
-        //leadVol = 50;
         
         //updates track volumes every frame
-        Mix_Volume(0, kickSnareVol);
-        Mix_Volume(1, bassVol);
-        Mix_Volume(2, chordsVol);
-        Mix_Volume(3, leadVol);
+        Mix_Volume(kickSnare, volume[kickSnare]);
+        Mix_Volume(bass, volume[bass]);
+        Mix_Volume(chords, volume[chords]);
+        Mix_Volume(lead, volume[lead]);
     }
 }
 
@@ -117,9 +119,9 @@ void Audio::update(int enemiesKilled)
 {
     if(enemiesKilled < 128)
     {
-        chordsVol = enemiesKilled;
+        volume[chords] = enemiesKilled;
     }else {
-        chordsVol = 128;
+        volume[chords] = 128;
     }
 }
 

@@ -52,6 +52,8 @@ public:
     void shoot();
     void isHit(float entityX, float entityY, float entityW, float entityH);
     
+    void checkKeysPerMin();
+    
     //function to 'kill' bullet when it collides with enemies
     void killBullet(int bulletIndex);
     
@@ -73,6 +75,15 @@ private:
     float speed = 10;
     float drag = 0.5;
     double angle;
+    
+    //total number of keystrokes
+    int numOfKeyPresses;
+    int keysPerMin;
+    //Timer stuff for measuring keystrokes per min
+    int timerStartTime;
+    int timerDeltaTime;
+    //total time elapsed since start of program in minutes
+    int totalMins;
     
     LTexture* gSpriteSheetTexture;
     SDL_Rect gSpriteClip;

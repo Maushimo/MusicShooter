@@ -26,6 +26,7 @@
 #include <sstream>
 #include <vector>
 
+//Different game states
 enum class GameStates { MAIN_MENU, PLAYING, QUIT, GAME_OVER };
 
 const int SCREEN_WIDTH = 800;

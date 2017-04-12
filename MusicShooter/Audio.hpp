@@ -15,22 +15,18 @@
 
 class Audio
 {
+    enum Tracks { kickSnare, bass, chords, lead };
+    
 public:
     Audio();
     ~Audio();
     
     //track layers
-    Mix_Chunk* kickSnare;
-    Mix_Chunk* bass;
-    Mix_Chunk* chords;
-    
+    std::vector<Mix_Chunk*> normalTracks;
     //std::vector<Mix_Chunk*> addPerc;
     
     //layer volumes
-    int kickSnareVol;
-    int bassVol;
-    int chordsVol;
-    int leadVol;
+    std::vector<int> volume;
     
     bool loadMusic();
     void playMusic();

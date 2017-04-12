@@ -211,6 +211,7 @@ int main(int argc, char const *argv[])
             //then play music
             audio->playMusic();
             
+            //update the "Health" string
             healthStream.str("");
             healthStream << "Health: " << player->health;
             
@@ -239,20 +240,25 @@ int main(int argc, char const *argv[])
                 //Press 'R' to reset
                 if( currentKeyStates[ SDL_SCANCODE_R ] )
                 {
+                    //set to the playing game state
                     GameState = GameStates::PLAYING;
                     
+                    //reset player position (amongst other variables)
                     player->reset();
                     
                     for(int i=0;i<bEnemySpawner.size();i++)
                     {
+                        //reset enemies in spawner
                         bEnemySpawner[i]->reset();
                     }
                     
+                    //resets game stuff (descriptive, I know)
                     gHandler->reset();
                 }
-                
+                //draw GAMEOVER text
                 gText->draw();
                 
+                //Update Screen
                 SDL_RenderPresent(gRenderer);
             }
         }

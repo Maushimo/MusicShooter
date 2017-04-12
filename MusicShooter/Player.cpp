@@ -21,6 +21,13 @@ Player::Player(SDL_Renderer* r, LTexture* texture, int sWidth, int sHeight)
     health = 100;
     
     bulletCount = -1;
+    
+    //set start time for keysPerMin timer
+    timerStartTime = SDL_GetTicks();
+    
+    numOfKeyPresses = 0;
+    keysPerMin = 0;
+    totalMins = 0;
 }
 
 Player::~Player()
@@ -44,6 +51,21 @@ bool Player::loadSheet()
 
 void Player::update()
 {
+    //get the change in time and convert it to seconds
+    timerDeltaTime = (SDL_GetTicks() - timerStartTime) / 1000;
+    
+    //if the timer hits a time that is a multiple of 60...
+    if(timerDeltaTime % 60 == 0)
+    {
+        //...increase total minutes elapsed!
+        totalMins++;
+    }
+    
+    //update "keysPerMin"
+    this->checkKeysPerMin();
+    
+    std::cout << "Keys Per Min: " << keysPerMin << std::endl;
+    
     //constantly add velocity
     posX+=vx;
     posY+=vy;
@@ -99,7 +121,7 @@ void Player::update()
         }
     }
     
-    std::cout << "Player Health: " << this->health << std::endl;
+    //std::cout << "Player Health: " << this->health << std::endl;
 }
 
 void Player::draw(int mouseX, int mouseY)
@@ -176,6 +198,31 @@ void Player::movementKeys()
     {
         this->moveRight();
     }
+}
+
+void Player::checkKeysPerMin()
+{
+    const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+    
+    //Everytime one of these keys is pressed, the numOfKeyPresses increments
+    if( currentKeyStates[ SDL_SCANCODE_W ] )
+    {
+        this->numOfKeyPresses++;
+    }
+    if( currentKeyStates[ SDL_SCANCODE_S ] )
+    {
+        this->numOfKeyPresses++;
+    }
+    if( currentKeyStates[ SDL_SCANCODE_A ] )
+    {
+        this->numOfKeyPresses++;
+    }
+    if( currentKeyStates[ SDL_SCANCODE_D ] )
+    {
+        this->numOfKeyPresses++;
+    }
+    
+    this->keysPerMin = this->numOfKeyPresses/this->totalMins;
 }
 
 void Player::shootKeys(Audio* a)
