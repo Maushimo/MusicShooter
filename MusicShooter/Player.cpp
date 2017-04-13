@@ -10,11 +10,13 @@
 
 Player::Player(SDL_Renderer* r, LTexture* texture, int sWidth, int sHeight)
 {
+    //set spritesheet and global renderers
     gRenderer = r;
     gSpriteSheetTexture = texture;
     SCREEN_WIDTH = sWidth;
     SCREEN_HEIGHT = sHeight;
     
+    //default position, angle and health
     posX = (SCREEN_WIDTH/2)-size/2;
     posY = (SCREEN_HEIGHT/2)-size/2;
     angle = 0.0;
@@ -25,6 +27,7 @@ Player::Player(SDL_Renderer* r, LTexture* texture, int sWidth, int sHeight)
     //set start time for keysPerMin timer
     timerStartTime = SDL_GetTicks();
     
+    //set keystroke tracking
     numOfKeyPresses = 0;
     keysPerMin = 0;
     totalMins = 0;
@@ -55,15 +58,17 @@ void Player::update()
     timerDeltaTime = (SDL_GetTicks() - timerStartTime) / 1000;
     
     //if the timer hits a time that is a multiple of 60...
-    if(timerDeltaTime % 60 == 0)
+    if(timerDeltaTime % 60 == 0 && timerDeltaTime != 0)
     {
         //...increase total minutes elapsed!
         totalMins++;
+        timerStartTime = SDL_GetTicks();
     }
     
     //update "keysPerMin"
     this->checkKeysPerMin();
     
+    std::cout << "Mins: " << totalMins << " Sec: " << timerDeltaTime << std::endl;
     std::cout << "Keys Per Min: " << keysPerMin << std::endl;
     
     //constantly add velocity
@@ -137,9 +142,9 @@ void Player::draw(int mouseX, int mouseY)
         this->mouseX = mouseX;
         this->mouseY = mouseY;
         
-        //angle = ((atan2((posY+size/2)-mouseY, (posX+size/2)-mouseX)*180)/M_PI);//-90;
-        
+        //render the cropped sprite
         this->gSpriteSheetTexture->render(posX, posY, &gSpriteClip, angle, NULL, SDL_FLIP_NONE);
+        //keep the sprite within game area
         this->boundaries();
         
         //iterate through every bullet in the array
@@ -222,7 +227,11 @@ void Player::checkKeysPerMin()
         this->numOfKeyPresses++;
     }
     
-    this->keysPerMin = this->numOfKeyPresses/this->totalMins;
+    //check that we aren't dividing by 0 to avoid errors
+    if(this->totalMins != 0)
+    {
+        this->keysPerMin = this->numOfKeyPresses/this->totalMins;
+    }
 }
 
 void Player::shootKeys(Audio* a)
@@ -351,7 +360,9 @@ void Player::isHit(float entityX, float entityY, float entityW, float entityH)
 
 void Player::killBullet(int bulletIndex)
 {
+    //remove from vector
     bullets.erase(bullets.begin()+bulletIndex);
+    //decrease count of onscreen bullets
     bulletCount--;
 }
 

@@ -165,6 +165,14 @@ int main(int argc, char const *argv[])
                     //quit = true;
                     GameState = GameStates::QUIT;
                 }
+                
+                const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+                
+                //Everytime one of these keys is pressed, the numOfKeyPresses increments
+                if( currentKeyStates[ SDL_SCANCODE_1 ] )
+                {
+                    audio->slow = !audio->slow;
+                }
             }
             
             //Get Mouse Position
