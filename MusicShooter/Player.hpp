@@ -35,6 +35,9 @@ public:
     int bulletCount;
     std::vector<Bullet*> bullets;
     
+    //a member variable communicating to other classes when the player is hit
+    bool mIsHit;
+    
     bool loadSheet();
     void update();
     void draw(int mouseX, int mouseY);

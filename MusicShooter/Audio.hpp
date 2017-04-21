@@ -16,7 +16,7 @@
 class Audio
 {
     //enums to help alleviate confusion
-    enum Tracks { kickSnare, bass, chords, lead };
+    enum Tracks { kickSnare, bass, chords, acousticDrums };
     
 public:
     Audio();
@@ -25,7 +25,6 @@ public:
     //track layers
     std::vector<Mix_Chunk*> normalTracks;
     std::vector<Mix_Chunk*> slowTracks;
-    //std::vector<Mix_Chunk*> addPerc;
     
     //layer volumes
     //normal track volume
@@ -38,10 +37,9 @@ public:
     //method to crossfade between slow and 
     void crossFadeSlowNormal();
     
-    //MIGHT USE THIS FUNCTION FOR BULLET SOUNDS
-    //void playPerc();
-    
     void update(int enemiesKilled);
+    
+    void incrementTracks(bool playerIsHit);
     
     bool isPlayed;
     bool isLoaded;

@@ -31,6 +31,8 @@ Player::Player(SDL_Renderer* r, LTexture* texture, int sWidth, int sHeight)
     numOfKeyPresses = 0;
     keysPerMin = 0;
     totalMins = 0;
+    
+    mIsHit = false;
 }
 
 Player::~Player()
@@ -110,8 +112,7 @@ void Player::update()
             //if any bullet is offScreen
             if(bullets[i]->isOffScreen)
             {
-                //delete it from the array (might actually be deleting renderer too!)
-                //delete bullets[i];
+                //delete it from the array
                 bullets.erase(bullets.begin()+i);
                 
                 //decrease the number of bullets on screen
@@ -343,18 +344,13 @@ void Player::moveDown()
 
 void Player::isHit(float entityX, float entityY, float entityW, float entityH)
 {
-    if(posX > entityX)
+    //mIsHit = false;
+    if(posX > entityX && posX < entityX+entityW && posY > entityY && posY < entityY+entityH)
     {
-        if(posX < entityX+entityW)
-        {
-            if(posY > entityY)
-            {
-                if(posY < entityY+entityH)
-                {
-                    health-=0.02;
-                }
-            }
-        }
+        health-=0.1;
+        mIsHit = true;
+    }else {
+        mIsHit = false;
     }
 }
 

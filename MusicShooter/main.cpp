@@ -65,6 +65,9 @@ bool init()
     //load font textures
     gFontTexture = new LTexture(gRenderer);
     healthFontTexture = new LTexture(gRenderer);
+    mainMenuTitleTexture = new LTexture(gRenderer);
+    mainMenuMovementInstructionsTexture = new LTexture(gRenderer);
+    mainMenuShootInstructionsTexture = new LTexture(gRenderer);
     
     //init entities
     player = new Player(gRenderer, gSpriteSheetTexture, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -84,7 +87,7 @@ bool init()
     gTotalEnemiesKilled = 0;
     
     //set initial state
-    GameState = GameStates::PLAYING;
+    GameState = GameStates::MAIN_MENU;
     
     /* 'GAME OVER' TEXT SETUP */
     //set the texture
@@ -100,6 +103,25 @@ bool init()
     healthFontTexture->loadFont("data/American Captain.ttf", 25);
     
     healthText = new Text(gRenderer, healthFontTexture, 660, 25);
+    
+    /* MAIN MENU TEXT SETUP */
+    //Title
+    mainMenuTitleTexture->loadFont("data/American Captain.ttf", 60);
+    mainMenuTitleTexture->loadFromRenderedText("Music Shooter", fontColour);
+    
+    titleText = new Text(gRenderer, mainMenuTitleTexture, 150, SCREEN_HEIGHT/2);
+    
+    //Movement instructions
+    mainMenuMovementInstructionsTexture->loadFont("data/American Captain.ttf", 30);
+    mainMenuMovementInstructionsTexture->loadFromRenderedText("'WASD' to move. Press 'R' to restart", fontColour);
+    
+    movementText = new Text(gRenderer, mainMenuMovementInstructionsTexture, 150, (SCREEN_HEIGHT/2+100));
+    
+    //Shooting instructions
+    mainMenuShootInstructionsTexture->loadFont("data/American Captain.ttf", 30);
+    mainMenuShootInstructionsTexture->loadFromRenderedText("'Arrow Keys' to shoot. Press 'Space' to start", fontColour);
+    
+    shootingText = new Text(gRenderer, mainMenuShootInstructionsTexture, 150, (SCREEN_HEIGHT/2+150));
 
     return success;
 }
@@ -155,6 +177,35 @@ int main(int argc, char const *argv[])
         const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
         SDL_Event e;
         
+        //MAIN_MENU STATE
+        while(GameState == GameStates::MAIN_MENU)
+        {
+            while(SDL_PollEvent(&e) != 0)
+            {
+                if(e.type == SDL_QUIT)
+                {
+                    //quit = true;
+                    GameState = GameStates::QUIT;
+                }
+            }
+            //Clear Screen (Black Screen for now)
+            SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);
+            SDL_RenderClear(gRenderer);
+            
+            //Press 'SPACE' to start game
+            if( currentKeyStates[ SDL_SCANCODE_SPACE ] )
+            {
+                GameState = GameStates::PLAYING;
+            }
+            
+            titleText->draw();
+            movementText->draw();
+            shootingText->draw();
+            
+            //Update Screen
+            SDL_RenderPresent(gRenderer);
+        }
+        
         //MAIN GAME LOOP
         while(GameState == GameStates::PLAYING)
         {
@@ -182,12 +233,33 @@ int main(int argc, char const *argv[])
             SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
             SDL_RenderClear(gRenderer);
             
+            //Press 'R' to reset
+            if( currentKeyStates[ SDL_SCANCODE_R ] )
+            {
+                //set to the playing game state
+                GameState = GameStates::PLAYING;
+                
+                //reset player position (amongst other variables)
+                player->reset();
+                
+                for(int i=0;i<bEnemySpawner.size();i++)
+                {
+                    //reset enemies in spawner
+                    bEnemySpawner[i]->reset();
+                }
+                
+                //resets game stuff (descriptive, I know)
+                gHandler->reset();
+            }
+            
+            /* PLAYER STUFF */
             player->movementKeys();
             player->shootKeys(audio);
             
             player->update();
             player->draw(mouseX, mouseY);
             
+            /* ENEMY SPAWNERS */
             for(int i=0; i<bEnemySpawner.size(); i++)
             {
                 bEnemySpawner[i]->setPlayerPosition(player->posX, player->posY);
@@ -200,7 +272,8 @@ int main(int argc, char const *argv[])
                 for(int j=0; j<bEnemySpawner[i]->enemies.size(); j++)
                 {
                     //Player collision detection
-                    player->isHit(bEnemySpawner[i]->enemies[j]->getPosX(), bEnemySpawner[i]->enemies[j]->getPosY(), bEnemySpawner[i]->enemies[j]->getSize(), bEnemySpawner[i]->enemies[j]->getSize());
+                    player->isHit(bEnemySpawner[i]->enemies[j]->getPosX(), bEnemySpawner[i]->enemies[j]->getPosY(),
+                                  bEnemySpawner[i]->enemies[j]->getSize(), bEnemySpawner[i]->enemies[j]->getSize());
                     
                     if(player->health <= 0)
                     {
@@ -214,11 +287,15 @@ int main(int argc, char const *argv[])
                 gHandler->setScore(gTotalEnemiesKilled);
             }
             
+            /* AUDIO STUFF */
             //Update layer volumes
-            audio->update(bEnemySpawner[0]->totalEnemiesKilled);
+            audio->update(gTotalEnemiesKilled);
+            //increment certain tracks constantly
+            audio->incrementTracks(player->mIsHit);
             //then play music
             audio->playMusic();
             
+            /* HEALTH TEXT */
             //update the "Health" string
             healthStream.str("");
             healthStream << "Health: " << player->health;
@@ -229,6 +306,7 @@ int main(int argc, char const *argv[])
             
             //Update Screen
             SDL_RenderPresent(gRenderer);
+            
             
             //GAMEOVER STATE
             while(GameState == GameStates::GAME_OVER)

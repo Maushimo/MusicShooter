@@ -30,6 +30,7 @@ Audio::Audio()
     
     //set drums volume at the start
     volume[kickSnare] = 127;
+    volume[acousticDrums] = 127;
 }
 
 Audio::~Audio()
@@ -47,14 +48,6 @@ Audio::~Audio()
         Mix_FreeChunk(slowTracks[i]);
         slowTracks[i] = NULL;
     }
-    
-    /*
-    for(int i = 0; i < addPerc.size(); i++)
-    {
-        Mix_FreeChunk(addPerc[i]);
-        addPerc[i] = NULL;
-    }
-     */
 }
 
 bool Audio::loadMusic()
@@ -65,7 +58,7 @@ bool Audio::loadMusic()
     //Load kickSnare
     normalTracks.push_back(new Mix_Chunk());
     normalTracks[kickSnare] = Mix_LoadWAV("data/audio/kickSnare.ogg");
-    //slow kick
+    //slow kickSnare
     slowTracks.push_back(new Mix_Chunk());
     slowTracks[kickSnare] = Mix_LoadWAV("data/audio/slowCore/kickSnare_SLOW.ogg");
     //Load bass
@@ -80,20 +73,13 @@ bool Audio::loadMusic()
     //slow chords
     slowTracks.push_back(new Mix_Chunk());
     slowTracks[chords] = Mix_LoadWAV("data/audio/slowCore/chords_SLOW.ogg");
+    //Load acousticDrums
+    normalTracks.push_back(new Mix_Chunk());
+    normalTracks[acousticDrums] = Mix_LoadWAV("data/audio/acousticDrums.ogg");
+    //slow acousticDrums
+    slowTracks.push_back(new Mix_Chunk());
+    slowTracks[acousticDrums] = Mix_LoadWAV("data/audio/slowCore/acousticDrums_SLOW.ogg");
     
-    /*
-    addPerc.push_back(new Mix_Chunk());
-    addPerc[0] = Mix_LoadWAV("data/audio/randomDrums/hat.ogg");
-    
-    addPerc.push_back(new Mix_Chunk());
-    addPerc[1] = Mix_LoadWAV("data/audio/randomDrums/shaker.ogg");
-    
-    addPerc.push_back(new Mix_Chunk());
-    addPerc[2] = Mix_LoadWAV("data/audio/randomDrums/snare.ogg");
-    
-    addPerc.push_back(new Mix_Chunk());
-    addPerc[3] = Mix_LoadWAV("data/audio/randomDrums/conga.ogg");
-     */
     
     for(int i=0; i<normalTracks.size();i++)
     {
@@ -141,12 +127,6 @@ void Audio::playMusic()
             
             isPlayed = true;
         }
-        /*
-        if(!slow)
-        {
-            volume[kickSnare] = 127;
-        }
-         */
         
         //hopefully this should just iterate through the 4 tracks and not break...
         for(int i=0; i<volume.size(); i++)
@@ -172,8 +152,8 @@ void Audio::update(int enemiesKilled)
     }
     
     crossFadeSlowNormal();
-    std::cout << "Slow: " << slow << std::endl;
-    std::cout << "Normal Drum Volume: " << volume[kickSnare] << " Slow Drum Volume: " << slowVolume[kickSnare] << std::endl;
+    //std::cout << "Slow: " << slow << std::endl;
+    //std::cout << "Normal Drum Volume: " << volume[kickSnare] << " Slow Drum Volume: " << slowVolume[kickSnare] << std::endl;
 }
 
 void Audio::crossFadeSlowNormal()
@@ -294,39 +274,50 @@ void Audio::crossFadeSlowNormal()
     }
 }
 
-/*
-void Audio::playPerc()
+void Audio::incrementTracks(bool playerIsHit)
 {
-    //generate random number between 0 and 99
-    int prob = rand() % 100;
-    
-    if(prob < 25)
+    //if the player is hit...
+    if(playerIsHit)
     {
-        //play lead1
-        Mix_PlayChannel(3, addPerc[0], 0);
-        std::cout << "PERCPLAYED" << std::endl;
-        return;
-    }
-    else if(prob > 25 && prob < 50)
+        std::cout << "playerIsHit " << playerIsHit << std::endl;
+        //...and if the state of the game is NOT slow...
+        if(!slow)
+        {
+            //...and if the volume of the BASS and the ACOUSTIC DRUMS is less than 50...
+            if(volume[bass] <= 50 && volume[acousticDrums] <= 50)
+            {
+                //...decrement the tracks!
+                volume[bass]-=50;
+                volume[acousticDrums]-=50;
+            }
+            //else statement for slowVolumes
+        }else
+        {
+            if(slowVolume[bass] <= 50)
+            {
+                slowVolume[bass]-=50;
+                slowVolume[acousticDrums]-=50;
+            }
+        }
+        //if the player is NOT hit...
+    }else if(!playerIsHit)
     {
-        //play lead2
-        Mix_PlayChannel(3, addPerc[1], 0);
-        std::cout << "PERCPLAYED" << std::endl;
-        return;
-    }
-    else if(prob > 50 && prob < 75)
-    {
-        //play lead3
-        Mix_PlayChannel(3, addPerc[2], 0);
-        std::cout << "PERCPLAYED" << std::endl;
-        return;
-    }
-    else if(prob >75 && prob < 100)
-    {
-        //play lead4
-        Mix_PlayChannel(3, addPerc[3], 0);
-        std::cout << "PERCPLAYED" << std::endl;
-        return;
+        std::cout << "playerIsHit: " << playerIsHit << std::endl;
+        if(!slow)
+        {
+            if(volume[bass] < 50)
+            {
+                //...we increment the tracks
+                volume[bass]++;
+                volume[acousticDrums]++;
+            }
+        }else
+        {
+            if(slowVolume[bass] < 50)
+            {
+                slowVolume[bass]++;
+                slowVolume[acousticDrums]++;
+            }
+        }
     }
 }
- */

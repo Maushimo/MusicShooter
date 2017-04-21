@@ -44,6 +44,11 @@ std::stringstream healthStream;
 //health font texture;
 LTexture* healthFontTexture;
 
+//Main menu textures
+LTexture* mainMenuTitleTexture;
+LTexture* mainMenuMovementInstructionsTexture;
+LTexture* mainMenuShootInstructionsTexture;
+
 //runs at the start of the program
 bool init();
 //runs when the program is closed
@@ -78,6 +83,11 @@ SDL_Color healthColour = { 0,0,0,255 };
 Text* gText;
 //health text
 Text* healthText;
+
+//main menu text
+Text* titleText;
+Text* movementText;
+Text* shootingText;
 
 //store mouse position
 int mouseX, mouseY;
