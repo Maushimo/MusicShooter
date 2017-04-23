@@ -23,11 +23,14 @@
 #include "GameHandler.hpp"
 
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include <vector>
 
 //Different game states
 enum class GameStates { MAIN_MENU, PLAYING, QUIT, GAME_OVER };
+
+enum class AudioStates { ADAPTIVE, STATIC };
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -56,6 +59,9 @@ void close();
 //mainly runs checks on the LTextures
 bool loadMedia();
 
+//method to generate text file containing various in game stats
+void generateAnalytics();
+
 //method to return sum of enemies killed across all spawners
 int sumOfEnemiesKilled();
 
@@ -75,6 +81,8 @@ GameHandler* gHandler;
 
 GameStates GameState;
 
+AudioStates CurrentAudioState;
+
 //set the colour
 SDL_Color fontColour = { 255,255,255,255 };
 SDL_Color healthColour = { 0,0,0,255 };
@@ -91,5 +99,9 @@ Text* shootingText;
 
 //store mouse position
 int mouseX, mouseY;
+
+//global timer stuff
+float gStartTime;
+float gDeltaTime;
 
 #endif /* main_h */

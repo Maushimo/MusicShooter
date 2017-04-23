@@ -28,7 +28,7 @@ public:
     //sum of enemies killed on current instance of spawner
     int totalEnemiesKilled;
     
-    //get it? "PUBLIC ENEMIES"?
+    //get it? "PUBLIC ENEMIES"? (It's a hiphop reference)
     std::vector<BasicEnemy*> enemies;
     
     bool underEnemyCount();
@@ -45,7 +45,7 @@ public:
     
 private:
     //max amount of enemies that can be spawned at one time
-    const int enemyLimit = 10;
+    int enemyLimit;
     //count of enemies currently on screen
     int enemyCount;
     
@@ -53,8 +53,12 @@ private:
     float posX, posY;
     
     //spawner timer stuff
-    float startTime;
-    float deltaTime;
+    float spawnStartTime;
+    float spawnDeltaTime;
+    
+    //enemyLimit timer stuff
+    int enemyLimitStartTime;
+    int enemyLimitDeltaTime;
     
     int timeLimit;
     

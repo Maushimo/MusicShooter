@@ -1,0 +1,5 @@
+ANALYTICS
+Total Time Played (Secs): 1.35
+Total No. of Key Presses: 11
+Total Enemies Killed: 0
+Total Health Lost: 0

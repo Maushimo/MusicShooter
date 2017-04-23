@@ -13,7 +13,10 @@ BasicEnemySpawnPoint::BasicEnemySpawnPoint(SDL_Renderer* r, LTexture* texture, P
     posX = x;
     posY = y;
     
+    //there aren't enemies on the screen just yet
     enemyCount = 0;
+    //set initial enemy limit
+    enemyLimit = 1;
     
     gRenderer = r;
     enemySpriteSheet = texture;
@@ -23,14 +26,14 @@ BasicEnemySpawnPoint::BasicEnemySpawnPoint(SDL_Renderer* r, LTexture* texture, P
     totalEnemiesKilled = 0;
     
     //Set the start time here
-    startTime = SDL_GetTicks();
-    //generate a random spawn time
+    spawnStartTime = SDL_GetTicks();
+    enemyLimitStartTime = SDL_GetTicks();
+    //generate a random spawn time under 4 seconds
     timeLimit = rand() % 4;
 }
 
 BasicEnemySpawnPoint::~BasicEnemySpawnPoint()
 {
-    
 }
 
 bool BasicEnemySpawnPoint::underEnemyCount()
@@ -54,16 +57,16 @@ void BasicEnemySpawnPoint::spawnEnemy()
         return;
     }else
     {
-        //if our timer reaches/goes over 2 seconds...
-        if(deltaTime >= timeLimit)
+        //if our timer reaches/goes over set time...
+        if(spawnDeltaTime >= timeLimit)
         {
             //spawn an enemy
             enemies.push_back(new BasicEnemy(gRenderer, enemySpriteSheet, posX, posY));
             enemyCount++;
             
             //then reset timer
-            startTime = SDL_GetTicks();
-            deltaTime = 0;
+            spawnStartTime = SDL_GetTicks();
+            spawnDeltaTime = 0;
         }
     }
 }
@@ -71,9 +74,27 @@ void BasicEnemySpawnPoint::spawnEnemy()
 void BasicEnemySpawnPoint::spawnerUpdate()
 {
     //get the change in time and convert it to seconds
-    deltaTime = (SDL_GetTicks() - startTime) / 1000.0f;
+    spawnDeltaTime = (SDL_GetTicks() - spawnStartTime) / 1000.0f;
+    enemyLimitDeltaTime = (SDL_GetTicks() - enemyLimitStartTime) / 1000;
     
-    //std::cout << "Spawner Delta Time: " << deltaTime << std::endl;
+    //every time the ENEMYLIMIT timers hit a multiple of 30 (excluding 0)
+    if((enemyLimitDeltaTime % 30) == 0 && enemyLimitDeltaTime != 0)
+    {
+        //and if the enemy limit is UNDER 20
+        if(enemyLimit < 20)
+        {
+            //we increment the limit to the spawner
+            enemyLimit++;
+            
+            //then reset the timer
+            enemyLimitStartTime = SDL_GetTicks();
+            enemyLimitDeltaTime = 0;
+        }else
+        {
+            //if we are over 20 then just set the limit to 20
+            enemyLimit = 20;
+        }
+    }
     
     for(int i = 0; i < enemyCount; i++)
     {

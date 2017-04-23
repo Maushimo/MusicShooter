@@ -63,6 +63,10 @@ public:
     //function to revert player to it's original state
     void reset();
     
+    /* GETTERS */
+    int getNumOfKeyPresses();
+    float getHealthLost();
+    
 private:
     //float posX, posY;
     float size = 60;

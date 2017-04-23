@@ -70,8 +70,8 @@ void Player::update()
     //update "keysPerMin"
     this->checkKeysPerMin();
     
-    std::cout << "Mins: " << totalMins << " Sec: " << timerDeltaTime << std::endl;
-    std::cout << "Keys Per Min: " << keysPerMin << std::endl;
+    //std::cout << "Mins: " << totalMins << " Sec: " << timerDeltaTime << std::endl;
+    //std::cout << "Keys Per Min: " << keysPerMin << std::endl;
     
     //constantly add velocity
     posX+=vx;
@@ -228,11 +228,7 @@ void Player::checkKeysPerMin()
         this->numOfKeyPresses++;
     }
     
-    //check that we aren't dividing by 0 to avoid errors
-    if(this->totalMins != 0)
-    {
-        this->keysPerMin = this->numOfKeyPresses/this->totalMins;
-    }
+    //this->keysPerMin = this->numOfKeyPresses;
 }
 
 void Player::shootKeys(Audio* a)
@@ -244,29 +240,21 @@ void Player::shootKeys(Audio* a)
     {
         this->angle = 90;
         this->shoot();
-        
-        //a->playPerc();
     }
     if( currentKeyStates[ SDL_SCANCODE_DOWN ] )
     {
         this->angle = -90;
         this->shoot();
-        
-        //a->playPerc();
     }
     if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
     {
         this->angle = 0;
         this->shoot();
-        
-        //a->playPerc();
     }
     if( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
     {
         this->angle = 180;
         this->shoot();
-        
-        //a->playPerc();
     }
     
     /* DIAGONAL */
@@ -372,4 +360,14 @@ void Player::reset()
     health = 100;
     
     bulletCount = -1;
+}
+
+int Player::getNumOfKeyPresses()
+{
+    return numOfKeyPresses;
+}
+
+float Player::getHealthLost()
+{
+    return 100-this->health;
 }

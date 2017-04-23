@@ -10,8 +10,11 @@
 
 Audio::Audio()
 {
+    //we haven't played or loaded music yet
     isPlayed = false;
     isLoaded = false;
+    
+    //load music into the vectors
     this->loadMusic();
     
     //don't start the game in "slow" mode
@@ -29,8 +32,7 @@ Audio::Audio()
     }
     
     //set drums volume at the start
-    volume[kickSnare] = 127;
-    volume[acousticDrums] = 127;
+    volume[kickSnare] = 100;
 }
 
 Audio::~Audio()
@@ -60,26 +62,25 @@ bool Audio::loadMusic()
     normalTracks[kickSnare] = Mix_LoadWAV("data/audio/kickSnare.ogg");
     //slow kickSnare
     slowTracks.push_back(new Mix_Chunk());
-    slowTracks[kickSnare] = Mix_LoadWAV("data/audio/slowCore/kickSnare_SLOW.ogg");
+    slowTracks[kickSnare] = Mix_LoadWAV("data/audio/slow/kickSnare_SLOW.ogg");
     //Load bass
     normalTracks.push_back(new Mix_Chunk());
     normalTracks[bass] = Mix_LoadWAV("data/audio/bass.ogg");
     //slow bass
     slowTracks.push_back(new Mix_Chunk());
-    slowTracks[bass] = Mix_LoadWAV("data/audio/slowCore/bass_SLOW.ogg");
+    slowTracks[bass] = Mix_LoadWAV("data/audio/slow/bass_SLOW.ogg");
     //Load chords
     normalTracks.push_back(new Mix_Chunk());
     normalTracks[chords] = Mix_LoadWAV("data/audio/chords.ogg");
     //slow chords
     slowTracks.push_back(new Mix_Chunk());
-    slowTracks[chords] = Mix_LoadWAV("data/audio/slowCore/chords_SLOW.ogg");
+    slowTracks[chords] = Mix_LoadWAV("data/audio/slow/chords_SLOW.ogg");
     //Load acousticDrums
     normalTracks.push_back(new Mix_Chunk());
     normalTracks[acousticDrums] = Mix_LoadWAV("data/audio/acousticDrums.ogg");
     //slow acousticDrums
     slowTracks.push_back(new Mix_Chunk());
-    slowTracks[acousticDrums] = Mix_LoadWAV("data/audio/slowCore/acousticDrums_SLOW.ogg");
-    
+    slowTracks[acousticDrums] = Mix_LoadWAV("data/audio/slow/acousticDrums_SLOW.ogg");
     
     for(int i=0; i<normalTracks.size();i++)
     {
@@ -98,6 +99,10 @@ bool Audio::loadMusic()
     {
         Mix_Volume(i, 0);
     }
+    
+    //load in static music
+    introTrack = Mix_LoadWAV("data/audio/Static/TrackIntro.ogg");
+    mainTrack = Mix_LoadWAV("data/audio/Static/TrackMain.ogg");
     
     //the music has been loaded
     isLoaded = success;
@@ -128,7 +133,7 @@ void Audio::playMusic()
             isPlayed = true;
         }
         
-        //hopefully this should just iterate through the 4 tracks and not break...
+        //hopefully this should just iterate through the tracks and not break...
         for(int i=0; i<volume.size(); i++)
         {
             Mix_Volume(i, volume[i]);
@@ -144,16 +149,39 @@ void Audio::playMusic()
 
 void Audio::update(int enemiesKilled)
 {
-    if(enemiesKilled < 128)
+    //flag to check if player has killed enough enemies for the chords track
+    bool overEnemyThresholdChords = false;
+    
+    if(enemiesKilled >= 50)
     {
-        volume[chords] = enemiesKilled;
-    }else {
-        volume[chords] = 128;
+        overEnemyThresholdChords = true;
     }
     
+    //whilst the enemies are under the MAX amount of enemies killed
+    if(enemiesKilled < 75)
+    {
+        //and if we've crossed over the threshold
+        if(overEnemyThresholdChords)
+        {
+            //equate the chord volume to the enemies killed
+            volume[chords] = enemiesKilled-50;
+        }
+        //otherwise equate the chord volume to max volume
+    }else {
+        if(overEnemyThresholdChords)
+        {
+            volume[chords] = 75;
+        }
+    }
+    //this sets the volume for "static" tracks
+    //setVolume(mEnemiesKilled);
+    
+    //increment enemiesKilled
+    this->mEnemiesKilled = enemiesKilled;
+    
     crossFadeSlowNormal();
-    //std::cout << "Slow: " << slow << std::endl;
-    //std::cout << "Normal Drum Volume: " << volume[kickSnare] << " Slow Drum Volume: " << slowVolume[kickSnare] << std::endl;
+    
+    //std::cout << "Lead Playing: " << Mix_Playing(lead) << std::endl;
 }
 
 void Audio::crossFadeSlowNormal()
@@ -276,48 +304,102 @@ void Audio::crossFadeSlowNormal()
 
 void Audio::incrementTracks(bool playerIsHit)
 {
+    //amount of enemies the player has to kill to unlock certain tracks
+    int enemyThreshold = 200;
+    //volume threshold for each track
+    int bassVolumeThreshold = 50;
+    int aDrumVolumeThreshold = 100;
+    
     //if the player is hit...
     if(playerIsHit)
     {
-        std::cout << "playerIsHit " << playerIsHit << std::endl;
         //...and if the state of the game is NOT slow...
         if(!slow)
         {
             //...and if the volume of the BASS and the ACOUSTIC DRUMS is less than 50...
-            if(volume[bass] <= 50 && volume[acousticDrums] <= 50)
+            if(this->mEnemiesKilled > enemyThreshold)
             {
                 //...decrement the tracks!
-                volume[bass]-=50;
-                volume[acousticDrums]-=50;
+                if(volume[bass] <= bassVolumeThreshold)
+                {
+                    volume[bass]-=50;
+                }
+                if(volume[acousticDrums] <= aDrumVolumeThreshold)
+                {
+                    volume[acousticDrums]-=50;
+                }
             }
             //else statement for slowVolumes
         }else
         {
-            if(slowVolume[bass] <= 50)
+            if(this->mEnemiesKilled > enemyThreshold)
             {
-                slowVolume[bass]-=50;
-                slowVolume[acousticDrums]-=50;
+                if(slowVolume[bass] <= bassVolumeThreshold)
+                {
+                    slowVolume[bass]-=25;
+                }
+                if(slowVolume[acousticDrums] <= aDrumVolumeThreshold)
+                {
+                    slowVolume[acousticDrums]-=25;
+                }
             }
         }
         //if the player is NOT hit...
     }else if(!playerIsHit)
     {
-        std::cout << "playerIsHit: " << playerIsHit << std::endl;
         if(!slow)
         {
-            if(volume[bass] < 50)
+            if(this->mEnemiesKilled > enemyThreshold)
             {
                 //...we increment the tracks
-                volume[bass]++;
-                volume[acousticDrums]++;
+                if(volume[bass] < bassVolumeThreshold)
+                {
+                    volume[bass]++;
+                }
+                if(volume[acousticDrums] < aDrumVolumeThreshold)
+                {
+                    volume[acousticDrums]++;
+                }
             }
         }else
         {
-            if(slowVolume[bass] < 50)
+            if(this->mEnemiesKilled > enemyThreshold)
             {
-                slowVolume[bass]++;
-                slowVolume[acousticDrums]++;
+                if(slowVolume[bass] < bassVolumeThreshold)
+                {
+                    slowVolume[bass]++;
+                }
+                if(slowVolume[acousticDrums] < aDrumVolumeThreshold)
+                {
+                    slowVolume[acousticDrums]++;
+                }
             }
         }
     }
 }
+
+void Audio::playStaticMusic()
+{
+    Mix_Volume(0, 100);
+    Mix_Volume(1, 100);
+    
+    if(!isPlayed)
+    {
+        //mainTrack has 20 sec silence for intro and is looped in the file itself
+        Mix_PlayChannel(0, introTrack, 0);
+        Mix_PlayChannel(1, mainTrack, 0);
+        
+        isPlayed = true;
+    }
+}
+
+/*
+void Audio::setVolume(int enemiesKilled)
+{
+    //set fadingChords
+    if(enemiesKilled >= 75)
+    {
+        volume[fadingChords] = 100;
+    }
+ }
+*/
