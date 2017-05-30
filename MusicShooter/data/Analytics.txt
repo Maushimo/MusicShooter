@@ -1,5 +1,7 @@
+ADAPTIVE
 ANALYTICS
-Total Time Played (Secs): 134.777
-Total No. of Key Presses: 7094
-Total Enemies Killed: 258
-Total Health Lost: 15.2998
+Total Time Played (Secs): 0
+Total No. of Key Presses: 0
+Total Enemies Killed: 0
+Total No. of bullets fired: 0
+Total Health Lost: 0

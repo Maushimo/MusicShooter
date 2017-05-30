@@ -22,8 +22,6 @@ public:
     //draw the text texture
     void draw();
     
-    
-    
 private:
     //position
     float posX, posY;

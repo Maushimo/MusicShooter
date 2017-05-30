@@ -95,7 +95,7 @@ bool init()
     gFontTexture->loadFont("data/American Captain.ttf", 45);
     
     //set the text to be displayed
-    gFontTexture->loadFromRenderedText("GAME OVER (Press 'R' to restart)", fontColour);
+    gFontTexture->loadFromRenderedText("GAME OVER (Press 'Q' to quit)", fontColour);
     
     //create text object
     gText = new Text(gRenderer, gFontTexture, 150, SCREEN_HEIGHT/2);
@@ -114,7 +114,7 @@ bool init()
     
     //Movement instructions
     mainMenuMovementInstructionsTexture->loadFont("data/American Captain.ttf", 30);
-    mainMenuMovementInstructionsTexture->loadFromRenderedText("'WASD' to move. Press 'R' to restart. Press 'Q' to quit", fontColour);
+    mainMenuMovementInstructionsTexture->loadFromRenderedText("'WASD' to move. Press 'Q' to quit", fontColour);
     
     movementText = new Text(gRenderer, mainMenuMovementInstructionsTexture, 150, (SCREEN_HEIGHT/2+100));
     
@@ -168,11 +168,20 @@ void generateAnalytics()
     //check to see if the text file is "open"
     if(analytics.is_open())
     {
+        if(CurrentAudioState == AudioStates::ADAPTIVE)
+        {
+            analytics << "ADAPTIVE" << std::endl;
+        }else if(CurrentAudioState == AudioStates::STATIC)
+        {
+            analytics << "STATIC" << std::endl;
+        }
+        
         //write the analytics to the file
         analytics << "ANALYTICS" << std::endl;
         analytics << "Total Time Played (Secs): " << gDeltaTime << std::endl;
         analytics << "Total No. of Key Presses: " << player->getNumOfKeyPresses() << std::endl;
         analytics << "Total Enemies Killed: " << gTotalEnemiesKilled << std::endl;
+        analytics << "Total No. of bullets fired: " << player->getTotalBulletsFired() << std::endl;
         analytics << "Total Health Lost: " << player->getHealthLost() << std::endl;
         //then close the file once we're done
         analytics.close();
@@ -218,7 +227,7 @@ int main(int argc, char const *argv[])
             SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);
             SDL_RenderClear(gRenderer);
             
-            //Press 'SPACE' to start game
+            //Press '1' or '2' to start game
             if( currentKeyStates[ SDL_SCANCODE_1 ] )
             {
                 GameState = GameStates::PLAYING;
@@ -268,6 +277,7 @@ int main(int argc, char const *argv[])
                 GameState = GameStates::QUIT;
             }
             
+            /*
             //Press 'R' to reset
             if( currentKeyStates[ SDL_SCANCODE_R ] )
             {
@@ -286,10 +296,11 @@ int main(int argc, char const *argv[])
                 //resets game stuff (descriptive, I know)
                 gHandler->reset();
             }
+             */
             
             /* PLAYER STUFF */
             player->movementKeys();
-            player->shootKeys(audio);
+            player->shootKeys();
             
             player->update();
             player->draw(mouseX, mouseY);
@@ -351,8 +362,6 @@ int main(int argc, char const *argv[])
             //update the time
             gDeltaTime = (SDL_GetTicks() - gStartTime) / 1000.0f;
             
-            //std::cout << "gDeltaTime: " << gDeltaTime << std::endl;
-            
             //GAMEOVER STATE
             while(GameState == GameStates::GAME_OVER)
             {
@@ -368,6 +377,9 @@ int main(int argc, char const *argv[])
                 SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);
                 SDL_RenderClear(gRenderer);
                 
+                audio->stop();
+                
+                /*
                 //Press 'R' to reset
                 if( currentKeyStates[ SDL_SCANCODE_R ] )
                 {
@@ -386,6 +398,7 @@ int main(int argc, char const *argv[])
                     //resets game stuff (descriptive, I know)
                     gHandler->reset();
                 }
+                 */
                 
                 //Press 'Q' to quit
                 if( currentKeyStates[ SDL_SCANCODE_Q ])

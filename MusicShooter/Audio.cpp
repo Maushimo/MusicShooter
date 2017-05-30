@@ -149,6 +149,9 @@ void Audio::playMusic()
 
 void Audio::update(int enemiesKilled)
 {
+    //set drums volume at the start
+    volume[kickSnare] = 100;
+    
     //flag to check if player has killed enough enemies for the chords track
     bool overEnemyThresholdChords = false;
     
@@ -391,6 +394,23 @@ void Audio::playStaticMusic()
         
         isPlayed = true;
     }
+}
+
+void Audio::stop()
+{
+    //set all volumes to 0
+    for(int i = 0; i < volume.size(); i++)
+    {
+        volume[i] = 0;
+    }
+    
+    for(int i = 0; i < slowVolume.size(); i++)
+    {
+        slowVolume[i] = 0;
+    }
+    
+    //pause all tracks
+    Mix_Pause(-1);
 }
 
 /*

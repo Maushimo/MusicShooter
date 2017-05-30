@@ -32,6 +32,8 @@ Player::Player(SDL_Renderer* r, LTexture* texture, int sWidth, int sHeight)
     keysPerMin = 0;
     totalMins = 0;
     
+    totalBulletsFired = 0;
+    
     mIsHit = false;
 }
 
@@ -231,7 +233,7 @@ void Player::checkKeysPerMin()
     //this->keysPerMin = this->numOfKeyPresses;
 }
 
-void Player::shootKeys(Audio* a)
+void Player::shootKeys()
 {
     const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
     
@@ -317,9 +319,13 @@ void Player::moveDown()
  {
      if(bulletCount < 10)
      {
+         //increment on screen bullet count
          bulletCount++;
          
+         //create a new bullet in the bullets vector
          bullets.push_back(new Bullet(gRenderer, gSpriteSheetTexture, (this->posX+size/4), this->posY, SCREEN_WIDTH, SCREEN_HEIGHT, this->angle));
+         
+         totalBulletsFired++;
          
          //std::cout << "Player BulletCount: " << bulletCount << std::endl;
      }else
@@ -332,7 +338,6 @@ void Player::moveDown()
 
 void Player::isHit(float entityX, float entityY, float entityW, float entityH)
 {
-    //mIsHit = false;
     if(posX > entityX && posX < entityX+entityW && posY > entityY && posY < entityY+entityH)
     {
         health-=0.1;
@@ -370,4 +375,9 @@ int Player::getNumOfKeyPresses()
 float Player::getHealthLost()
 {
     return 100-this->health;
+}
+
+int Player::getTotalBulletsFired()
+{
+    return totalBulletsFired;
 }

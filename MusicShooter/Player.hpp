@@ -45,7 +45,7 @@ public:
     
     //methods to handle key presses
     void movementKeys();
-    void shootKeys(Audio* a);
+    void shootKeys();
     
     void moveLeft();
     void moveRight();
@@ -66,6 +66,7 @@ public:
     /* GETTERS */
     int getNumOfKeyPresses();
     float getHealthLost();
+    int getTotalBulletsFired();
     
 private:
     //float posX, posY;
@@ -91,6 +92,8 @@ private:
     int timerDeltaTime;
     //total time elapsed since start of program in minutes
     int totalMins;
+    //total amount of bullets fired
+    int totalBulletsFired;
     
     LTexture* gSpriteSheetTexture;
     SDL_Rect gSpriteClip;

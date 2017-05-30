@@ -28,7 +28,7 @@ public:
     //sum of enemies killed on current instance of spawner
     int totalEnemiesKilled;
     
-    //get it? "PUBLIC ENEMIES"? (It's a hiphop reference)
+    //"PUBLIC ENEMIES"? get it? (It's a hiphop reference)
     std::vector<BasicEnemy*> enemies;
     
     bool underEnemyCount();

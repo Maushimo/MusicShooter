@@ -23,6 +23,9 @@ public:
     Audio();
     ~Audio();
     
+    //called when player hits 'GAMEOVER' state
+    void stop();
+    
     /* ADAPTIVE MUSIC */
     //track layers
     std::vector<Mix_Chunk*> normalTracks;
@@ -43,7 +46,7 @@ public:
     
     void incrementTracks(bool playerIsHit);
     
-    void setVolume(int enemiesKilled);
+    //void setVolume(int enemiesKilled);
     
     bool isPlayed;
     bool isLoaded;

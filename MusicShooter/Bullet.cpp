@@ -145,7 +145,7 @@ void Bullet::draw()
         return;
     }else
     {
-    gSpriteSheetTexture->render(posX, posY, &gSpriteClip, angle, NULL, SDL_FLIP_NONE);
+        gSpriteSheetTexture->render(posX, posY, &gSpriteClip, angle, NULL, SDL_FLIP_NONE);
     }
 }
 
